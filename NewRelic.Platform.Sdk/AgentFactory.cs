@@ -9,13 +9,13 @@ using NewRelic.Platform.Sdk.Utils;
 namespace NewRelic.Platform.Sdk
 {
     /// <summary>
-    /// An abstract utility class provided to easily create Components from a configuration file
+    /// An abstract utility class provided to easily create Agents from a configuration file
     /// </summary>
-    public abstract class ComponentFactory
+    public abstract class AgentFactory
     {
 	    private readonly string ConfigurationFileName;
 
-	    public ComponentFactory(string configFileName) 
+	    public AgentFactory(string configFileName) 
         {
             if (string.IsNullOrEmpty(configFileName))
             {
@@ -25,42 +25,42 @@ namespace NewRelic.Platform.Sdk
 		    this.ConfigurationFileName = configFileName;
 	    }
 
-        internal List<Component> CreateComponents()
+        internal List<Agent> CreateAgents()
         {
-            var componentConfigurations = ReadJsonFile();
-            List<Component> components = new List<Component>();
+            var agentConfigurations = ReadJsonFile();
+            List<Agent> agents = new List<Agent>();
 
-            foreach (var properties in componentConfigurations)
+            foreach (var properties in agentConfigurations)
             {
-                components.Add(CreateComponentWithConfiguration((IDictionary<string, object>)properties));
+                agents.Add(CreateAgentWithConfiguration((IDictionary<string, object>)properties));
             }
 
-            return components;
+            return agents;
         }
 
         internal List<object> ReadJsonFile()
         {
             if(!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), this.ConfigurationFileName)))
             {
-                throw new FileNotFoundException("Unable to locate component configuration file", this.ConfigurationFileName);
+                throw new FileNotFoundException("Unable to locate agent configuration file", this.ConfigurationFileName);
             }
 
             using (var reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), this.ConfigurationFileName)))
             {
                 using (var jsonReader = new JsonTextReader(reader))
                 {
-                    var componentProperties = JsonHelper.Deserialize(reader.ReadToEnd());
-                    return (List<object>)componentProperties;
+                    var agentProperties = JsonHelper.Deserialize(reader.ReadToEnd());
+                    return (List<object>)agentProperties;
                 }
             }
         }
 
         /// <summary>
-        /// The ComponentFactory will read configuration data from specified JSON file and invoke this method for each
+        /// The AgentFactory will read configuration data from specified JSON file and invoke this method for each
         /// object configuration containing an IDictionary of the deserialized properties
         /// </summary>
         /// <param name="properties"></param>
         /// <returns></returns>
-        public abstract Component CreateComponentWithConfiguration(IDictionary<string, object> properties);
+        public abstract Agent CreateAgentWithConfiguration(IDictionary<string, object> properties);
     }
 }

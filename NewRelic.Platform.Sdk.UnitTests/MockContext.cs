@@ -10,21 +10,26 @@ namespace NewRelic.Platform.Sdk.UnitTests
     {
         public string Version { get { return "1.0.0"; } set { } }
 
-        public AgentData AgentData;
+        public PlatformData PlatformData;
 
         public MockContext()
         {
-            this.AgentData = new AgentData();
+            this.PlatformData = new PlatformData();
         }
 
         public void ReportMetric(string guid, string componentName, string metricName, string units, float? value)
         {
-            this.AgentData.AddMetric(guid, componentName, metricName, units, value.Value);
+            this.PlatformData.AddMetric(guid, componentName, metricName, units, value.Value);
+        }
+
+        public void ReportMetric(string guid, string componentName, string metricName, string units, float value, int count, float min, float max, float sumOfSquares)
+        {
+            this.PlatformData.AddMetric(guid, componentName, metricName, units, value, count, min, max, sumOfSquares);
         }
 
         public void SendMetricsToService()
         {
-            this.AgentData.Reset();
+            this.PlatformData.Reset();
         }
     }
 }

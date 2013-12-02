@@ -7,6 +7,11 @@ namespace NewRelic.Platform.Sdk.Processors
 {
     /// <summary>
     /// A processor for processing metrics over a period of time (e.g. operations/second)
+    /// Use by giving a constantly growing metric each poll cycle and it will give a rate
+    /// differential over the time of the poll interval.  
+    /// 
+    /// For example: Process(5) Process(6) with a Poll Interval of 1 minute gives 6-5 units / 1 minute
+    /// or 1 unit per minute.
     /// </summary>
     public class EpochProcessor : IProcessor
     {

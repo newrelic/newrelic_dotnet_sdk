@@ -50,11 +50,12 @@
   <ItemGroup>
     <Compile Include="Binding\Context.cs" />
     <Compile Include="Binding\IContext.cs" />
-    <Compile Include="Component.cs" />
+    <Compile Include="Agent.cs" />
     <Compile Include="Binding\AgentData.cs" />
     <Compile Include="Binding\ComponentData.cs" />
     <Compile Include="Binding\MetricData.cs" />
-    <Compile Include="ComponentFactory.cs" />
+    <Compile Include="AgentFactory.cs" />
+    <Compile Include="Binding\PlatformData.cs" />
     <Compile Include="Processors\EpochProcessor.cs" />
     <Compile Include="Processors\IProcessor.cs" />
     <Compile Include="Utils\ConfigurationHelper.cs" />

@@ -9,14 +9,14 @@ using Newtonsoft.Json.Converters;
 
 namespace NewRelic.Platform.Sdk.Utils
 {
-    internal static class JsonHelper
+    public static class JsonHelper
     {
         /// <summary>
         /// Serializes a list of simple .NET types (e.g. IDictionary, List, and primitives) into a JSON string
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal static string Serialize(object obj) 
+        public static string Serialize(object obj) 
         {
             return JsonConvert.SerializeObject(obj, new KeyValuePairConverter());
         }
@@ -26,7 +26,7 @@ namespace NewRelic.Platform.Sdk.Utils
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>
-        internal static object Deserialize(string json)
+        public static object Deserialize(string json)
         {
             return JsonToDotNetType(JToken.Parse(json));
         }

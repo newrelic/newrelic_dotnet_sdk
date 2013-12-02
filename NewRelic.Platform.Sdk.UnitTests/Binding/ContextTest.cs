@@ -17,6 +17,13 @@ namespace NewRelic.Platform.Sdk.UnitTests
         }
 
         [TestMethod]
+        public void TestReportValidMetric()
+        {
+            var context = new Context();
+            context.ReportMetric("com.newrelic.test", "TestComponent", "Category/TestMetric", "unit", 5); // Assert no throws
+        }
+
+        [TestMethod]
         public void TestReportBadMetricNullGuid()
         {
             try

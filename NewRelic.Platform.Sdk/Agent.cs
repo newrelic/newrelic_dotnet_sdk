@@ -7,22 +7,22 @@ using NewRelic.Platform.Sdk.Binding;
 namespace NewRelic.Platform.Sdk
 {
     /// <summary>
-    /// An abstract utility class to programmatically create Components.  
-    /// Each component will have its PollCycle method invoked once per poll interval.
+    /// An abstract utility class to programmatically create Agents.  
+    /// Each agent will have its PollCycle method invoked once per poll interval.
     /// </summary>
-    public abstract class Component
+    public abstract class Agent
     {
         public abstract string Guid { get; }
         public abstract string Version { get; }
 
         private IContext _context;
 
-        public Component()
+        public Agent()
         {
         }
 
         /// <summary>
-        /// Each Component that shares a Context reference will be sent in a single request.
+        /// Each Agent that shares a Context reference will be sent in a single request.
         /// </summary>
         /// <param name="context"></param>
         public void PrepareToRun(IContext context)
@@ -41,14 +41,14 @@ namespace NewRelic.Platform.Sdk
         }
 
         /// <summary>
-        /// Registers a metric for this poll cycle that will be sent when all Components complete their PollCycle.
+        /// Registers a metric for this poll cycle that will be sent when all Agents complete their PollCycle.
         /// </summary>
         /// <param name="metricName"></param>
         /// <param name="units"></param>
         /// <param name="value"></param>
         public void ReportMetric(string metricName, string units, float value)
         {
-            _context.ReportMetric(this.Guid, this.GetComponentName(), metricName, units, value);
+            _context.ReportMetric(this.Guid, this.GetAgentName(), metricName, units, value);
         }
 
         /// <summary>
@@ -58,9 +58,9 @@ namespace NewRelic.Platform.Sdk
         public abstract void PollCycle();
 
         /// <summary>
-        /// A human readable string denotes the name of this Component in the New Relic service.
+        /// A human readable string denotes the name of this Agent in the New Relic service.
         /// </summary>
         /// <returns></returns>
-        public abstract string GetComponentName();
+        public abstract string GetAgentName();
     }
 }

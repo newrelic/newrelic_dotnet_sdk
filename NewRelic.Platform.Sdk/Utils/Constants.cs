@@ -15,6 +15,7 @@ namespace NewRelic.Platform.Sdk
         public static readonly string DefaultPollInterval = "60";
 
         public static readonly int DefaultDuration = 60;
+        public static readonly int DefaultAggregationLimit = 10;
 
         public static readonly string DisableNewRelic = "DISABLE_NEWRELIC";
     }

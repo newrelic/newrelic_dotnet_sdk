@@ -7,21 +7,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace NewRelic.Platform.Sdk.UnitTests
 {
     [TestClass]
-    public class ComponentTest
+    public class AgentTest
     {
         [TestMethod]
         public void TestValidPollCycle()
         {
-            var component = new TestComponent("TestComponent");
+            var agent = new TestAgent("TestAgent");
             var context = new MockContext();
-            component.PrepareToRun(context);
-            component.PollCycle();
+            agent.PrepareToRun(context);
+            agent.PollCycle();
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(context.AgentData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(context.PlatformData);
             Assert.AreEqual(1, componentsList.Count);
 
-            var componentMap = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent");
-            Assert.AreEqual("TestComponent", componentMap["name"]);
+            var componentMap = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestAgent");
+            Assert.AreEqual("TestAgent", componentMap["name"]);
 
             var metrics = TestSerializationHelper.GetMetricsMapFromComponentMap(componentMap);
 
@@ -31,7 +31,7 @@ namespace NewRelic.Platform.Sdk.UnitTests
         [TestMethod]
         public void TestMultipleValidPollCycle()
         {
-            var component = new TestComponent("TestComponent");
+            var component = new TestAgent("TestAgent");
             var context = new MockContext();
             component.PrepareToRun(context);
 
@@ -40,11 +40,11 @@ namespace NewRelic.Platform.Sdk.UnitTests
                 component.PollCycle();
             }
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(context.AgentData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(context.PlatformData);
             Assert.AreEqual(1, componentsList.Count);
 
-            var componentMap = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent");
-            Assert.AreEqual("TestComponent", componentMap["name"]);
+            var componentMap = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestAgent");
+            Assert.AreEqual("TestAgent", componentMap["name"]);
 
             var metrics = TestSerializationHelper.GetMetricsMapFromComponentMap(componentMap);
             Assert.AreEqual(1, metrics.Count);

@@ -12,15 +12,15 @@ namespace NewRelic.Platform.Sdk.Binding
 {
     public class Context : IContext
     {
-        private AgentData _agentData;
+        private PlatformData _platformData;
 
-        internal string ServiceUri { get { return ConfigurationHelper.GetConfiguration(Constants.ConfigKeyServiceUri); } }
+        internal string ServiceUri { get { return ConfigurationHelper.GetConfiguration(Constants.ConfigKeyServiceUri, Constants.DefaultServiceUri); } }
         internal string LicenseKey { get { return ConfigurationHelper.GetConfiguration(Constants.ConfigKeyLicenseKey); } }
 
         public string Version 
         { 
-            get { return _agentData.Version; }
-            set { _agentData.Version = value; }  
+            get { return _platformData.Version; }
+            set { _platformData.Version = value; }  
         }
 
         private static Logger s_log = LogManager.GetLogger("Context");
@@ -34,14 +34,14 @@ namespace NewRelic.Platform.Sdk.Binding
             s_log.Debug("Using service URL: {0}", this.ServiceUri);
             s_log.Debug("Using license key: {0}", this.LicenseKey);
 
-            this._agentData = new AgentData();
+            this._platformData = new PlatformData();
         }
 
         /// <summary>
         /// Prepare a New Relic metric to be delivered to the service at the end of this poll cycle.  
         /// </summary>
         /// <param name="guid">A string guid identifying the plugin this is associated with (e.g. 'com.yourcompany.pluginname')</param>
-        /// <param name="componentName">A string name identifying the plugin component that will appear in the service UI (e.g. 'MyPlugin')</param>
+        /// <param name="componentName">A string name identifying the plugin agent that will appear in the service UI (e.g. 'MyPlugin')</param>
         /// <param name="metricName">A string name representing the name of the metric (e.g. 'Category/Name')</param>
         /// <param name="units">The units of the metric you are sending to the service (e.g. 'byte/second')</param>
         /// <param name="value">The non-negative float value representing this value</param>
@@ -76,8 +76,57 @@ namespace NewRelic.Platform.Sdk.Binding
                     throw new ArgumentException("New Relic Platform does not currently support negative values", "value");
                 }
 
-                _agentData.AddMetric(guid, componentName, metricName, units, value.Value);
+                _platformData.AddMetric(guid, componentName, metricName, units, value.Value);
             }
+        }
+
+        /// <summary>
+        /// Prepare a New Relic metric to be delivered to the service at the end of this poll cycle.
+        /// </summary>
+        /// <param name="guid">A string guid identifying the plugin this is associated with (e.g. 'com.yourcompany.pluginname')</param>
+        /// <param name="componentName">A string name identifying the plugin agent that will appear in the service UI (e.g. 'MyPlugin')</param>
+        /// <param name="metricName">A string name representing the name of the metric (e.g. 'Category/Name')</param>
+        /// <param name="units">The units of the metric you are sending to the service (e.g. 'byte/second')</param>
+        /// <param name="value">The non-negative float value representing this value</param>
+        /// <param name="count">The int value representing how many poll cycle this metric has been aggregated for</param>
+        /// <param name="min">The non-negative float value representing this min value for this poll cycle</param>
+        /// <param name="max">The non-negative float value representing this max value for this poll cycle</param>
+        /// <param name="sumOfSquares">The non-negative float value representing the sum of square values for this poll cycle</param>
+        public void ReportMetric(string guid, string componentName, string metricName, string units, float value, int count, float min, float max, float sumOfSquares)
+        {
+            s_log.Info("Reporting metric: {0} -> {1}[{2}]={3}", componentName, metricName, units, value);
+            if (string.IsNullOrEmpty(guid))
+            {
+                throw new ArgumentNullException("guid", "Null parameter was passed to ReportMetric()");
+            }
+
+            if (string.IsNullOrEmpty(componentName))
+            {
+                throw new ArgumentNullException("componentName", "Null parameter was passed to ReportMetric()");
+            }
+
+            if (string.IsNullOrEmpty(metricName))
+            {
+                throw new ArgumentNullException("metricName", "Null parameter was passed to ReportMetric()");
+            }
+
+            if (string.IsNullOrEmpty(units))
+            {
+                throw new ArgumentNullException("units", "Null parameter was passed to ReportMetric()");
+            }
+
+            if (count < 1)
+            {
+                throw new ArgumentException("New Relic Platform does not support count values less than 1", "count");
+            }
+
+            // Ensure the value is not null since EpochProcessors will return 0 on initial processing
+            if (value < 0 || min < 0 || max < 0 || sumOfSquares < 0)
+            {
+                throw new ArgumentException("New Relic Platform does not currently support negative values");
+            }
+
+            _platformData.AddMetric(guid, componentName, metricName, units, value, count, min, max, sumOfSquares);
         }
 
         /// <summary>
@@ -88,19 +137,10 @@ namespace NewRelic.Platform.Sdk.Binding
         {
             s_log.Info("Preparing to send metrics to service");
 
-            // Do not send any data if there are no valid components
-            if (!_agentData.HasComponents())
+            // Check to see if the Agent data is valid before sending data
+            if (!ValidatePlatformData())
             {
-                s_log.Info("No metrics reported for this poll cycle, continuing...");
-                _agentData.Reset(); // Reset the aggregation timer
                 return;
-            }
-
-            // Reset the agent data if we have been aggregating for too long
-            if (_agentData.IsPastAggregationLimit())
-            {
-                s_log.Warn("The service has not been successfully contacted in several minutes.  Starting a fresh aggregation cycle.");
-                _agentData.Reset();
             }
 
             var request = (HttpWebRequest)WebRequest.Create(this.ServiceUri);
@@ -111,7 +151,7 @@ namespace NewRelic.Platform.Sdk.Binding
 
             using (var writer = new StreamWriter(request.GetRequestStream()))
             {
-                var str = JsonHelper.Serialize(_agentData.Serialize());
+                var str = JsonHelper.Serialize(_platformData.Serialize());
 
                 if (s_log.IsDebugEnabled)
                 {
@@ -122,6 +162,27 @@ namespace NewRelic.Platform.Sdk.Binding
             }
 
             HandleServiceResponse(request);
+        }
+
+        private bool ValidatePlatformData()
+        {
+            // Do not send any data if no agents reported
+            if (!_platformData.HasComponents())
+            {
+                s_log.Info("No metrics reported for this poll cycle, continuing...");
+                _platformData.Reset(); // Reset the aggregation timer
+                return false;
+            }
+
+            // Reset the agent data if we have been aggregating for too long
+            if (_platformData.IsPastAggregationLimit())
+            {
+                s_log.Warn("The service has not been successfully contacted in several minutes.  Starting a fresh aggregation cycle.");
+                _platformData.Reset(); // Reset the aggregation timer
+                return false;
+            }
+
+            return true;
         }
 
         private void HandleServiceResponse(HttpWebRequest request)
@@ -136,7 +197,7 @@ namespace NewRelic.Platform.Sdk.Binding
                         {
                             s_log.Info("Metrics successfully sent");
                             // Reset aggregation after successful delivery
-                            _agentData.Reset();
+                            _platformData.Reset();
                         }
                     }
                 }

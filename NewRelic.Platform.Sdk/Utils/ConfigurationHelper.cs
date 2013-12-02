@@ -10,20 +10,19 @@ namespace NewRelic.Platform.Sdk.Utils
     {
         internal static string GetConfiguration(string key)
         {
-            return System.Configuration.ConfigurationManager.AppSettings[key] ?? GetDefaultConfigurationValue(key);
+            return GetConfiguration(key, null);
         }
 
-        private static string GetDefaultConfigurationValue(string key)
+        internal static string GetConfiguration(string key, string defaultValue)
         {
-            switch (key)
+            var configuration = System.Configuration.ConfigurationManager.AppSettings[key] ?? defaultValue;
+
+            if (configuration == null)
             {
-                case "NewRelicServiceUri":
-                    return Constants.DefaultServiceUri;
-                case "NewRelicPollInterval":
-                    return Constants.DefaultPollInterval;
-                default:
-                    throw new ConfigurationErrorsException(string.Format("Requested configuration value '{0}' could not be found", key));
+                throw new ConfigurationErrorsException(string.Format("Requested configuration value '{0}' could not be found", key));
             }
+
+            return configuration;
         }
     }
 }

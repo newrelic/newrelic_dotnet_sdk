@@ -11,40 +11,40 @@ namespace NewRelic.Platform.Sdk
 {
     public class Runner
     {
-        private List<ComponentFactory> _factories;
-        private List<Component> _components;
+        private List<AgentFactory> _factories;
+        private List<Agent> _agents;
 
         private static Logger s_log = LogManager.GetLogger("Runner");
 
         public Runner()
         {
-            _factories = new List<ComponentFactory>();
-            _components = new List<Component>();
+            _factories = new List<AgentFactory>();
+            _agents = new List<Agent>();
         }
 
         /// <summary>
-        /// Add an instance of agent to the Runner.  Any components added prior to invoking SetupAndRun() will have their
+        /// Add an instance of an Agent to the Runner.  Any agents added prior to invoking SetupAndRun() will have their
         /// PollCycle() method invoked each polling interval.
         /// </summary>
-        /// <param name="component"></param>
-        public void Add(Component component)
+        /// <param name="agent"></param>
+        public void Add(Agent agent)
         {
-            if (component == null)
+            if (agent == null)
             {
-                throw new ArgumentNullException("component", "You must pass in a non-null component");
+                throw new ArgumentNullException("agent", "You must pass in a non-null agent");
             }
 
-            s_log.Info("Adding new component: {0}", component.GetComponentName());
-            _components.Add(component);
+            s_log.Info("Adding new agent: {0}", agent.GetAgentName());
+            _agents.Add(agent);
         }
 
         /// <summary>
         /// Add an instance of a factory to the Runner.  Any factories added prior to invoking SetupAndRun() will have
-        /// their CreateComponentWithConfiguration() method invoked which will create a list of Components initialized through
+        /// their CreateAgentWithConfiguration() method invoked which will create a list of Agents initialized through
         /// the factory's configuration file that will be used for polling intervals.
         /// </summary>
         /// <param name="factory"></param>
-        public void Add(ComponentFactory factory)
+        public void Add(AgentFactory factory)
         {
             if (factory == null)
             {
@@ -56,28 +56,28 @@ namespace NewRelic.Platform.Sdk
         }
 
         /// <summary>
-        /// This method only returns during a fatal error.  It will initialize components if necessary, and then begin polling once
-        /// per configurable PollInterval invoking registered Component's PollCycle() methods.  Then sending the data to the New Relic service.
+        /// This method only returns during a fatal error.  It will initialize agents if necessary, and then begin polling once
+        /// per configurable PollInterval invoking registered Agent's PollCycle() methods.  Then sending the data to the New Relic service.
         /// </summary>
         public void SetupAndRun()
         {
-            if (_factories.Count == 0 && _components.Count == 0)
+            if (_factories.Count == 0 && _agents.Count == 0)
             {
-                throw new InvalidOperationException("You must first call 'Add()' at least once with a valid factory or component");
+                throw new InvalidOperationException("You must first call 'Add()' at least once with a valid factory or agent");
             }
 
-            // Initialize components if they added a ComponentFactory, otherwise they have explicitly added initialized components already
+            // Initialize agents if they added an AgentFactory, otherwise they have explicitly added initialized agents already
             if (_factories.Count > 0)
             {
-                InitializeFactoryComponents();
+                InitializeFactoryAgents();
             }
 
-            // Initialize components with the same Context so they aggregate to a single a request
+            // Initialize agents with the same Context so they aggregate to a single a request
             var context = new Context();
 
-            foreach (var component in _components)
+            foreach (var agent in _agents)
             {
-                component.PrepareToRun(context);
+                agent.PrepareToRun(context);
             }
 
             var pollInterval = GetPollInterval(); // Fetch poll interval here so we can report any issues early
@@ -86,9 +86,9 @@ namespace NewRelic.Platform.Sdk
             {
                 try
                 {
-                    foreach (var component in _components)
+                    foreach (var agent in _agents)
                     {
-                        component.PollCycle();
+                        agent.PollCycle();
                     }
 
                     context.SendMetricsToService();
@@ -103,18 +103,18 @@ namespace NewRelic.Platform.Sdk
             }
         }
 
-        private void InitializeFactoryComponents()
+        private void InitializeFactoryAgents()
         {
-            foreach (ComponentFactory factory in _factories)
+            foreach (AgentFactory factory in _factories)
             {
-                _components = _components.Union(factory.CreateComponents()).ToList();
+                _agents = _agents.Union(factory.CreateAgents()).ToList();
             }
         }
 
         private int GetPollInterval()
         {
             int pollInterval = 0;
-            var configVal = ConfigurationHelper.GetConfiguration(Constants.ConfigKeyPollInterval);
+            var configVal = ConfigurationHelper.GetConfiguration(Constants.ConfigKeyPollInterval, Constants.DefaultPollInterval);
 
             Int32.TryParse(configVal, out pollInterval);
             s_log.Debug("Using poll interval: {0} seconds", pollInterval);

@@ -50,15 +50,15 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Binding\AgentDataTest.cs" />
+    <Compile Include="Binding\PlatformDataTest.cs" />
     <Compile Include="Binding\ComponentDataTest.cs" />
     <Compile Include="Binding\ContextTest.cs" />
-    <Compile Include="ComponentTest.cs" />
+    <Compile Include="AgentTest.cs" />
     <Compile Include="MockContext.cs" />
     <Compile Include="Processors\EpochProcessorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Binding\MetricDataTest.cs" />
-    <Compile Include="TestComponent.cs" />
+    <Compile Include="TestAgent.cs" />
     <Compile Include="TestSerializationHelper.cs" />
   </ItemGroup>
   <ItemGroup>

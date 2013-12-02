@@ -8,9 +8,9 @@ namespace NewRelic.Platform.Sdk.UnitTests
 {
     internal static class TestSerializationHelper
     {
-        internal static List<object> GetComponentsListFromAgent(AgentData agent)
+        internal static List<object> GetComponentsListFromAgent(PlatformData platformData)
         {
-            return (List<object>)agent.Serialize()["components"];
+            return (List<object>)platformData.Serialize()["components"];
         }
 
         internal static IDictionary<string, object> GetMetricsMapFromComponent(ComponentData component)
