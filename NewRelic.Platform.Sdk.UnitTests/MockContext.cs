@@ -10,11 +10,11 @@ namespace NewRelic.Platform.Sdk.UnitTests
     {
         public string Version { get { return "1.0.0"; } set { } }
 
-        public PlatformData PlatformData;
+        public RequestData PlatformData;
 
         public MockContext()
         {
-            this.PlatformData = new PlatformData();
+            this.PlatformData = new RequestData();
         }
 
         public void ReportMetric(string guid, string componentName, string metricName, string units, float? value)

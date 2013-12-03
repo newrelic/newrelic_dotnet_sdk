@@ -8,18 +8,18 @@ using NewRelic.Platform.Sdk.Binding;
 namespace NewRelic.Platform.Sdk.UnitTests.Binding
 {
     [TestClass]
-    public class PlatformDataTest
+    public class RequestDataTest
     {
         [TestMethod]
         public void TestAddSingleMetricSucceeds()
         {
-            var platformData = new PlatformData();
+            var requestData = new RequestData();
 
-            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(platformData).Count);
+            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(requestData).Count);
 
-            platformData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 2);
+            requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 2);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(platformData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
             Assert.AreEqual(1, componentsList.Count);
 
             var component = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent");
@@ -36,15 +36,15 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
         [TestMethod]
         public void TestAddMultipleMetricsSucceeds()
         {
-            var platformData = new PlatformData();
+            var requestData = new RequestData();
 
-            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(platformData).Count);
+            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(requestData).Count);
 
-            platformData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric1", "unit", 2);
-            platformData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric2", "unit", 3);
-            platformData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric3", "unit", 4);
+            requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric1", "unit", 2);
+            requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric2", "unit", 3);
+            requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric3", "unit", 4);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(platformData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
             Assert.AreEqual(1, componentsList.Count);
 
             var component = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent");
@@ -58,15 +58,15 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
         [TestMethod]
         public void TestAggregateMetricsSucceeds()
         {
-            var platformData = new PlatformData();
+            var requestData = new RequestData();
 
-            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(platformData).Count);
+            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(requestData).Count);
 
-            platformData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 2);
-            platformData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 3);
-            platformData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 4);
+            requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 2);
+            requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 3);
+            requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 4);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(platformData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
             Assert.AreEqual(1, componentsList.Count);
 
             var component = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent");
@@ -79,15 +79,15 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
         [TestMethod]
         public void TestMultipleComponentsSucceeds()
         {
-            var platformData = new PlatformData();
+            var requestData = new RequestData();
 
-            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(platformData).Count);
+            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(requestData).Count);
 
-            platformData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
-            platformData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
-            platformData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
+            requestData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
+            requestData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
+            requestData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(platformData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
             Assert.AreEqual(3, componentsList.Count);
 
             var component1 = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent1");
@@ -106,20 +106,20 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
         [TestMethod]
         public void TestAggregateWithMultipleComponentsSucceeds()
         {
-            var platformData = new PlatformData();
+            var requestData = new RequestData();
 
-            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(platformData).Count);
+            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(requestData).Count);
 
-            platformData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
-            platformData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
+            requestData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
+            requestData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
 
-            platformData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
-            platformData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
+            requestData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
+            requestData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
 
-            platformData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
-            platformData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
+            requestData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
+            requestData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(platformData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
             Assert.AreEqual(3, componentsList.Count);
 
             var component1 = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent1");
@@ -140,47 +140,47 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
         [TestMethod]
         public void TestResetComponentsSucceeds()
         {
-            var platformData = new PlatformData();
+            var requestData = new RequestData();
 
-            platformData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
-            platformData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
-            platformData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
+            requestData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
+            requestData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
+            requestData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
 
-            var beforeResetList = TestSerializationHelper.GetComponentsListFromAgent(platformData);
+            var beforeResetList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
             Assert.AreEqual(3, beforeResetList.Count);
 
-            platformData.Reset();
+            requestData.Reset();
 
-            var firstAfterResetList = TestSerializationHelper.GetComponentsListFromAgent(platformData);
+            var firstAfterResetList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
             Assert.AreEqual(0, firstAfterResetList.Count);
 
-            platformData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
-            platformData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
-            platformData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
+            requestData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
+            requestData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
+            requestData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
 
-            var secondAfterResetList = TestSerializationHelper.GetComponentsListFromAgent(platformData);
+            var secondAfterResetList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
             Assert.AreEqual(3, secondAfterResetList.Count);
         }
 
         [TestMethod]
         public void TestDifferentGuidDoesntAggregate()
         {
-            var platformData = new PlatformData();
+            var requestData = new RequestData();
 
-            platformData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 2);
-            platformData.AddMetric("com.newrelic.anothertest", "TestComponent", "Test/Metric", "unit", 2);
+            requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 2);
+            requestData.AddMetric("com.newrelic.anothertest", "TestComponent", "Test/Metric", "unit", 2);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(platformData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
             Assert.AreEqual(2, componentsList.Count);
         }
 
         [TestMethod]
         public void TestAggregationLimitIsRespected()
         {
-            var platformData = new PlatformData();
-            platformData.SetAggregationLimit(DateTime.Now.AddMinutes(-20));
+            var requestData = new RequestData();
+            requestData.SetAggregationLimit(DateTime.Now.AddMinutes(-20));
 
-            Assert.IsTrue(platformData.IsPastAggregationLimit(), "Aggregation limit is not being respected");
+            Assert.IsTrue(requestData.IsPastAggregationLimit(), "Aggregation limit is not being respected");
         }
 
         private void AssertMetricValues(IDictionary<string, object> metrics, string metricName, float value, int count, float min, float max, float sumOfSquares) 

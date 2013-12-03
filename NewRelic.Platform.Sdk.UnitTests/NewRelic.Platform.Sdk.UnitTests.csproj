@@ -50,7 +50,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Binding\PlatformDataTest.cs" />
+    <Compile Include="Binding\RequestDataTest.cs" />
     <Compile Include="Binding\ComponentDataTest.cs" />
     <Compile Include="Binding\ContextTest.cs" />
     <Compile Include="AgentTest.cs" />

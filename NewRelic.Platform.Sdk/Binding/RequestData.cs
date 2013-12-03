@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NewRelic.Platform.Sdk.Binding
 {
-    internal class PlatformData
+    internal class RequestData
     {
         private DateTime _aggregationStartTime;
 
@@ -18,7 +18,7 @@ namespace NewRelic.Platform.Sdk.Binding
             set { _agent.Version = value; }
         }
 
-        internal PlatformData()
+        internal RequestData()
         {
             _agent = new AgentData();
             _components = new Dictionary<string, ComponentData>();

@@ -12,7 +12,7 @@ namespace NewRelic.Platform.Sdk.Binding
 {
     public class Context : IContext
     {
-        private PlatformData _platformData;
+        private RequestData _platformData;
         private string _licenseKey;
 
         internal string ServiceUri { get { return ConfigurationHelper.GetConfiguration(Constants.ConfigKeyServiceUri, Constants.DefaultServiceUri); } }
@@ -44,7 +44,7 @@ namespace NewRelic.Platform.Sdk.Binding
             s_log.Debug("Using license key: {0}", this.LicenseKey);
 
             this._licenseKey = licenseKey;
-            this._platformData = new PlatformData();
+            this._platformData = new RequestData();
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace NewRelic.Platform.Sdk.Binding
             s_log.Info("Preparing to send metrics to service");
 
             // Check to see if the Agent data is valid before sending data
-            if (!ValidatePlatformData())
+            if (!ValidateRequestData())
             {
                 return;
             }
@@ -174,7 +174,7 @@ namespace NewRelic.Platform.Sdk.Binding
             HandleServiceResponse(request);
         }
 
-        private bool ValidatePlatformData()
+        private bool ValidateRequestData()
         {
             // Do not send any data if no agents reported
             if (!_platformData.HasComponents())
