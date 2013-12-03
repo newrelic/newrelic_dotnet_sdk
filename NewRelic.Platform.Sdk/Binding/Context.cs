@@ -12,7 +12,7 @@ namespace NewRelic.Platform.Sdk.Binding
 {
     public class Context : IContext
     {
-        private RequestData _platformData;
+        private RequestData _requestData;
         private string _licenseKey;
 
         internal string ServiceUri { get { return ConfigurationHelper.GetConfiguration(Constants.ConfigKeyServiceUri, Constants.DefaultServiceUri); } }
@@ -20,8 +20,8 @@ namespace NewRelic.Platform.Sdk.Binding
 
         public string Version 
         { 
-            get { return _platformData.Version; }
-            set { _platformData.Version = value; }  
+            get { return _requestData.Version; }
+            set { _requestData.Version = value; }  
         }
 
         private static Logger s_log = LogManager.GetLogger("Context");
@@ -44,7 +44,7 @@ namespace NewRelic.Platform.Sdk.Binding
             s_log.Debug("Using license key: {0}", this.LicenseKey);
 
             this._licenseKey = licenseKey;
-            this._platformData = new RequestData();
+            this._requestData = new RequestData();
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace NewRelic.Platform.Sdk.Binding
                     throw new ArgumentException("New Relic Platform does not currently support negative values", "value");
                 }
 
-                _platformData.AddMetric(guid, componentName, metricName, units, value.Value);
+                _requestData.AddMetric(guid, componentName, metricName, units, value.Value);
             }
         }
 
@@ -136,7 +136,7 @@ namespace NewRelic.Platform.Sdk.Binding
                 throw new ArgumentException("New Relic Platform does not currently support negative values");
             }
 
-            _platformData.AddMetric(guid, componentName, metricName, units, value, count, min, max, sumOfSquares);
+            _requestData.AddMetric(guid, componentName, metricName, units, value, count, min, max, sumOfSquares);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace NewRelic.Platform.Sdk.Binding
 
             using (var writer = new StreamWriter(request.GetRequestStream()))
             {
-                var str = JsonHelper.Serialize(_platformData.Serialize());
+                var str = JsonHelper.Serialize(_requestData.Serialize());
 
                 if (s_log.IsDebugEnabled)
                 {
@@ -177,18 +177,18 @@ namespace NewRelic.Platform.Sdk.Binding
         private bool ValidateRequestData()
         {
             // Do not send any data if no agents reported
-            if (!_platformData.HasComponents())
+            if (!_requestData.HasComponents())
             {
                 s_log.Info("No metrics reported for this poll cycle, continuing...");
-                _platformData.Reset(); // Reset the aggregation timer
+                _requestData.Reset(); // Reset the aggregation timer
                 return false;
             }
 
             // Reset the agent data if we have been aggregating for too long
-            if (_platformData.IsPastAggregationLimit())
+            if (_requestData.IsPastAggregationLimit())
             {
                 s_log.Warn("The service has not been successfully contacted in several minutes.  Starting a fresh aggregation cycle.");
-                _platformData.Reset(); // Reset the aggregation timer
+                _requestData.Reset(); // Reset the aggregation timer
                 return false;
             }
 
@@ -207,7 +207,7 @@ namespace NewRelic.Platform.Sdk.Binding
                         {
                             s_log.Info("Metrics successfully sent");
                             // Reset aggregation after successful delivery
-                            _platformData.Reset();
+                            _requestData.Reset();
                         }
                     }
                 }

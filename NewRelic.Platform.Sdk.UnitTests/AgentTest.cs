@@ -17,7 +17,7 @@ namespace NewRelic.Platform.Sdk.UnitTests
             agent.PrepareToRun(context);
             agent.PollCycle();
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(context.PlatformData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(context.RequestData);
             Assert.AreEqual(1, componentsList.Count);
 
             var componentMap = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestAgent");
@@ -40,7 +40,7 @@ namespace NewRelic.Platform.Sdk.UnitTests
                 component.PollCycle();
             }
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(context.PlatformData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(context.RequestData);
             Assert.AreEqual(1, componentsList.Count);
 
             var componentMap = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestAgent");
