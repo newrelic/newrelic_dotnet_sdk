@@ -27,24 +27,28 @@ namespace NewRelic.Platform.Sdk.Binding
 
         internal void AddMetric(string guid, string componentName, string metricName, string units, float value)
         {
-            if (!_components.ContainsKey(componentName))
+            string key = string.Format("{0}:{1}", componentName, guid);
+
+            if (!_components.ContainsKey(key))
             {
                 ComponentData componentData = new ComponentData(componentName, guid);
-                _components.Add(componentName, componentData);
+                _components.Add(key, componentData);
             }
 
-            _components[componentName].AddMetric(new MetricData(metricName, units, value));
+            _components[key].AddMetric(new MetricData(metricName, units, value));
         }
 
         internal void AddMetric(string guid, string componentName, string metricName, string units, float value, int count, float min, float max, float sumOfSquares)
         {
-            if (!_components.ContainsKey(componentName))
+            string key = string.Format("{0}:{1}", componentName, guid);
+
+            if (!_components.ContainsKey(key))
             {
                 ComponentData componentData = new ComponentData(componentName, guid);
-                _components.Add(componentName, componentData);
+                _components.Add(key, componentData);
             }
 
-            _components[componentName].AddMetric(new MetricData(metricName, units, count, value, min, max, sumOfSquares));
+            _components[key].AddMetric(new MetricData(metricName, units, count, value, min, max, sumOfSquares));
         }
 
         internal bool HasComponents()

@@ -163,6 +163,18 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
         }
 
         [TestMethod]
+        public void TestDifferentGuidDoesntAggregate()
+        {
+            var platformData = new PlatformData();
+
+            platformData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 2);
+            platformData.AddMetric("com.newrelic.anothertest", "TestComponent", "Test/Metric", "unit", 2);
+
+            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(platformData);
+            Assert.AreEqual(2, componentsList.Count);
+        }
+
+        [TestMethod]
         public void TestAggregationLimitIsRespected()
         {
             var platformData = new PlatformData();

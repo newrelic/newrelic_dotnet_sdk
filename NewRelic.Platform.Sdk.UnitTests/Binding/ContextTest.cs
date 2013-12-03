@@ -17,6 +17,15 @@ namespace NewRelic.Platform.Sdk.UnitTests
         }
 
         [TestMethod]
+        public void TestContextInitializationWithLicenseKey()
+        {
+            string license = "FakeyMcFakeKey";
+            var context = new Context(license);
+
+            Assert.AreEqual(license, context.LicenseKey);
+        }
+
+        [TestMethod]
         public void TestReportValidMetric()
         {
             var context = new Context();

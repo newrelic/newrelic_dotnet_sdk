@@ -13,9 +13,10 @@ namespace NewRelic.Platform.Sdk.Binding
     public class Context : IContext
     {
         private PlatformData _platformData;
+        private string _licenseKey;
 
         internal string ServiceUri { get { return ConfigurationHelper.GetConfiguration(Constants.ConfigKeyServiceUri, Constants.DefaultServiceUri); } }
-        internal string LicenseKey { get { return ConfigurationHelper.GetConfiguration(Constants.ConfigKeyLicenseKey); } }
+        internal string LicenseKey { get { return _licenseKey ?? ConfigurationHelper.GetConfiguration(Constants.ConfigKeyLicenseKey); } }
 
         public string Version 
         { 
@@ -29,11 +30,20 @@ namespace NewRelic.Platform.Sdk.Binding
         /// This class is responsible for maintaining metrics that have been reported as well as sending them to the New Relic 
         /// service. Any Components that share a Request reference will have their data sent to the service in one request.
         /// </summary>
-        public Context()
+        public Context() : this(null)
+        {
+        }
+
+        /// <summary>
+        /// This class is responsible for maintaining metrics that have been reported as well as sending them to the New Relic 
+        /// service. Any Components that share a Request reference will have their data sent to the service in one request.
+        /// </summary>
+        public Context(string licenseKey)
         {
             s_log.Debug("Using service URL: {0}", this.ServiceUri);
             s_log.Debug("Using license key: {0}", this.LicenseKey);
 
+            this._licenseKey = licenseKey;
             this._platformData = new PlatformData();
         }
 
