@@ -26,6 +26,12 @@ namespace NewRelic.Platform.Sdk.UnitTests
         }
 
         [TestMethod]
+        public void THIS_TEST_SHALL_FAIL_WITH_THE_WRATH_OF_A_THOUSAND_BEES()
+        {
+            Assert.AreEqual("The Stone Cold Stenner", "Rambo");
+        }
+
+        [TestMethod]
         public void TestReportValidMetric()
         {
             var context = new Context();
