@@ -40,11 +40,11 @@ namespace NewRelic.Platform.Sdk.Binding
         /// </summary>
         public Context(string licenseKey)
         {
-            s_log.Debug("Using service URL: {0}", this.ServiceUri);
-            s_log.Debug("Using license key: {0}", this.LicenseKey);
-
             this._licenseKey = licenseKey;
             this._requestData = new RequestData();
+
+            s_log.Debug("Using service URL: {0}", this.ServiceUri);
+            s_log.Debug("Using license key: {0}", this.LicenseKey);
         }
 
         /// <summary>
