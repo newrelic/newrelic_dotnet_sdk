@@ -84,13 +84,21 @@ namespace NewRelic.Platform.Sdk
 
             while (true)
             {
+                // Invoke each Agent's PollCycle method, logging any exceptions that occur
                 try
                 {
                     foreach (var agent in _agents)
                     {
                         agent.PollCycle();
                     }
+                }
+                catch(Exception e) 
+                {
+                    s_log.Error("Error error occurred during PollCycle", e);
+                }
 
+                try 
+                {
                     context.SendMetricsToService();
 
                     // Enables limited runs for tests that want to invoke the service

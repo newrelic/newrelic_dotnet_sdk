@@ -233,7 +233,7 @@ namespace NewRelic.Platform.Sdk.Binding
                         {
                             // Remotely disabled
                             s_log.Fatal("Remotely disabled by New Relic service");
-                            Process.GetCurrentProcess().Kill();
+                            throw new NewRelicServiceException(response.StatusCode, "Remotely disabled by New Relic Service", we);
                         }
                         else
                         {
