@@ -10,7 +10,7 @@ namespace NewRelic.Platform.Sdk.UnitTests
     {
         public string Version { get { return "1.0.0"; } set { } }
 
-        public RequestData RequestData;
+        public RequestData RequestData { get; set; }
 
         public MockContext()
         {

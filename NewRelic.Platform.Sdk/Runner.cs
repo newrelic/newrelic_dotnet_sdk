@@ -93,6 +93,12 @@ namespace NewRelic.Platform.Sdk
 
                     context.SendMetricsToService();
 
+                    // Enables limited runs for tests that want to invoke the service
+                    if (_limitRun && --_limit == 0)
+                    {
+                        return;
+                    }
+
                     Thread.Sleep(pollInterval);
                 }
                 catch (Exception e)
@@ -126,5 +132,24 @@ namespace NewRelic.Platform.Sdk
 
             return pollInterval *= 1000; // Convert to milliseconds since that's what system calls expect;
         }
+
+        #region Test Helpers
+
+        /// <summary>
+        /// DO NOT USE: Exposed for test purposes
+        /// </summary>
+        private int _limit = 0;
+        private bool _limitRun = false;
+
+        internal List<Agent> Agents { get { return _agents; } }
+
+        internal void SetupAndRunWithLimit(int limit) 
+        {
+            _limitRun = true;
+            _limit = limit;
+            SetupAndRun();
+        }
+
+        #endregion
     }
 }

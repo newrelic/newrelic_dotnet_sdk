@@ -8,7 +8,7 @@ namespace NewRelic.Platform.Sdk.UnitTests
 {
     internal static class TestSerializationHelper
     {
-        internal static List<object> GetComponentsListFromAgent(RequestData requestData)
+        internal static List<object> GetComponentsListFromRequestData(RequestData requestData)
         {
             return (List<object>)requestData.Serialize()["components"];
         }
@@ -16,6 +16,11 @@ namespace NewRelic.Platform.Sdk.UnitTests
         internal static IDictionary<string, object> GetMetricsMapFromComponent(ComponentData component)
         {
             return ((IDictionary<string, object>)component.Serialize(DateTime.Now.Subtract(TimeSpan.FromSeconds(60)))["metrics"]);
+        }
+
+        internal static List<object> GetComponentsListFromDictionary(IDictionary<string, object> dictionary)
+        {
+            return (List<object>)dictionary["components"];
         }
 
         internal static IDictionary<string, object> GetComponentMapFromComponentsList(List<object> components, string name)

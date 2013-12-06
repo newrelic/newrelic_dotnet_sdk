@@ -9,6 +9,8 @@ namespace NewRelic.Platform.Sdk.Binding
     {
         string Version { get; set; }
 
+        RequestData RequestData { get; }
+
         /// <summary>
         /// Prepare a New Relic metric to be delivered to the service at the end of this poll cycle.  
         /// </summary>

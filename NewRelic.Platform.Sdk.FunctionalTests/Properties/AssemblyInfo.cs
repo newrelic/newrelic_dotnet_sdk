@@ -5,25 +5,22 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NewRelic.Platform.Sdk")]
+[assembly: AssemblyTitle("NewRelic.Platform.Sdk.FunctionalTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NewRelic.Platform.Sdk")]
+[assembly: AssemblyProduct("NewRelic.Platform.Sdk.FunctionalTests")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
-// to COM agents.  If you need to access a type in this assembly from 
+// to COM components.  If you need to access a type in this assembly from 
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a2b63c8c-fedd-4456-a2ac-ecbc378d50e5")]
-
-[assembly: InternalsVisibleTo("NewRelic.Platform.Sdk.UnitTests")]
-[assembly: InternalsVisibleTo("NewRelic.Platform.Sdk.FunctionalTests")]
+[assembly: Guid("d1d53a0e-10f1-44ad-b6e7-d1e22fa0c59c")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,6 +31,5 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

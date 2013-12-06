@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NewRelic.Platform.Sdk.Binding
 {
-    internal class RequestData
+    public class RequestData
     {
         private DateTime _aggregationStartTime;
 
@@ -18,14 +18,14 @@ namespace NewRelic.Platform.Sdk.Binding
             set { _agent.Version = value; }
         }
 
-        internal RequestData()
+        public RequestData()
         {
             _agent = new AgentData();
             _components = new Dictionary<string, ComponentData>();
             _aggregationStartTime = DateTime.Now.Subtract(TimeSpan.FromSeconds(Constants.DefaultDuration)); // Set with the default duration
         }
 
-        internal void AddMetric(string guid, string componentName, string metricName, string units, float value)
+        public void AddMetric(string guid, string componentName, string metricName, string units, float value)
         {
             string key = string.Format("{0}:{1}", componentName, guid);
 
@@ -38,7 +38,7 @@ namespace NewRelic.Platform.Sdk.Binding
             _components[key].AddMetric(new MetricData(metricName, units, value));
         }
 
-        internal void AddMetric(string guid, string componentName, string metricName, string units, float value, int count, float min, float max, float sumOfSquares)
+        public void AddMetric(string guid, string componentName, string metricName, string units, float value, int count, float min, float max, float sumOfSquares)
         {
             string key = string.Format("{0}:{1}", componentName, guid);
 
@@ -51,23 +51,23 @@ namespace NewRelic.Platform.Sdk.Binding
             _components[key].AddMetric(new MetricData(metricName, units, count, value, min, max, sumOfSquares));
         }
 
-        internal bool HasComponents()
+        public bool HasComponents()
         {
             return _components.Count > 0;
         }
 
-        internal bool IsPastAggregationLimit()
+        public bool IsPastAggregationLimit()
         {
             return Convert.ToInt32((DateTime.Now - _aggregationStartTime).TotalMinutes) > Constants.DefaultAggregationLimit;
         }
 
-        internal void Reset()
+        public void Reset()
         {
             _components = new Dictionary<string, ComponentData>();
             _aggregationStartTime = DateTime.Now;
         }
 
-        internal IDictionary<string, object> Serialize()
+        public IDictionary<string, object> Serialize()
         {
             IDictionary<string, object> output = new Dictionary<string, object>();
             output.Add("agent", _agent.Serialize());

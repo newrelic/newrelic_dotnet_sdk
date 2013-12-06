@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NewRelic.Platform.Sdk.UnitTests;
 
 namespace NewRelic.Platform.Sdk.UnitTests
 {
@@ -17,7 +18,7 @@ namespace NewRelic.Platform.Sdk.UnitTests
             agent.PrepareToRun(context);
             agent.PollCycle();
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(context.RequestData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromRequestData(context.RequestData);
             Assert.AreEqual(1, componentsList.Count);
 
             var componentMap = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestAgent");
@@ -40,7 +41,7 @@ namespace NewRelic.Platform.Sdk.UnitTests
                 component.PollCycle();
             }
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(context.RequestData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromRequestData(context.RequestData);
             Assert.AreEqual(1, componentsList.Count);
 
             var componentMap = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestAgent");
