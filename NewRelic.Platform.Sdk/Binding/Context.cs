@@ -15,6 +15,8 @@ namespace NewRelic.Platform.Sdk.Binding
         private RequestData _requestData;
         private string _licenseKey;
 
+        private static Logger s_log = LogManager.GetLogger("Context");
+
         internal string ServiceUri { get { return ConfigurationHelper.GetConfiguration(Constants.ConfigKeyServiceUri, Constants.DefaultServiceUri); } }
         internal string LicenseKey { get { return _licenseKey ?? ConfigurationHelper.GetConfiguration(Constants.ConfigKeyLicenseKey); } }
 
@@ -24,7 +26,8 @@ namespace NewRelic.Platform.Sdk.Binding
             set { _requestData.Version = value; }  
         }
 
-        private static Logger s_log = LogManager.GetLogger("Context");
+        // Exposed to enable functional testing for plugin developers
+        public RequestData RequestData { get { return _requestData; } }
 
         /// <summary>
         /// This class is responsible for maintaining metrics that have been reported as well as sending them to the New Relic 
@@ -230,7 +233,7 @@ namespace NewRelic.Platform.Sdk.Binding
                         {
                             // Remotely disabled
                             s_log.Fatal("Remotely disabled by New Relic service");
-                            Process.GetCurrentProcess().Kill();
+                            throw new NewRelicServiceException(response.StatusCode, "Remotely disabled by New Relic Service", we);
                         }
                         else
                         {
@@ -239,6 +242,12 @@ namespace NewRelic.Platform.Sdk.Binding
                             {
                                 s_log.Error("Unexpected response from the New Relic service. StatusCode: {0} ({1}), BodyContents: {2}", 
                                     response.StatusCode, response.StatusDescription, body);
+                            }
+
+                            // Rethrow if this is a client exception, keep trying if it is a server error
+                            if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 500)
+                            {
+                                throw new NewRelicServiceException(response.StatusCode, body, we);
                             }
                         }
                     }

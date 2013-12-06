@@ -84,14 +84,28 @@ namespace NewRelic.Platform.Sdk
 
             while (true)
             {
+                // Invoke each Agent's PollCycle method, logging any exceptions that occur
                 try
                 {
                     foreach (var agent in _agents)
                     {
                         agent.PollCycle();
                     }
+                }
+                catch(Exception e) 
+                {
+                    s_log.Error("Error error occurred during PollCycle", e);
+                }
 
+                try 
+                {
                     context.SendMetricsToService();
+
+                    // Enables limited runs for tests that want to invoke the service
+                    if (_limitRun && --_limit == 0)
+                    {
+                        return;
+                    }
 
                     Thread.Sleep(pollInterval);
                 }
@@ -126,5 +140,24 @@ namespace NewRelic.Platform.Sdk
 
             return pollInterval *= 1000; // Convert to milliseconds since that's what system calls expect;
         }
+
+        #region Test Helpers
+
+        /// <summary>
+        /// DO NOT USE: Exposed for test purposes
+        /// </summary>
+        private int _limit = 0;
+        private bool _limitRun = false;
+
+        internal List<Agent> Agents { get { return _agents; } }
+
+        internal void SetupAndRunWithLimit(int limit) 
+        {
+            _limitRun = true;
+            _limit = limit;
+            SetupAndRun();
+        }
+
+        #endregion
     }
 }

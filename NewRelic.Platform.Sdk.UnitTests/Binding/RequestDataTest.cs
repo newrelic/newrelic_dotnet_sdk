@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NewRelic.Platform.Sdk.Binding;
+using NewRelic.Platform.Sdk.UnitTests;
 
 namespace NewRelic.Platform.Sdk.UnitTests.Binding
 {
@@ -15,11 +16,11 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
         {
             var requestData = new RequestData();
 
-            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(requestData).Count);
+            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromRequestData(requestData).Count);
 
             requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 2);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromRequestData(requestData);
             Assert.AreEqual(1, componentsList.Count);
 
             var component = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent");
@@ -38,13 +39,13 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
         {
             var requestData = new RequestData();
 
-            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(requestData).Count);
+            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromRequestData(requestData).Count);
 
             requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric1", "unit", 2);
             requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric2", "unit", 3);
             requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric3", "unit", 4);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromRequestData(requestData);
             Assert.AreEqual(1, componentsList.Count);
 
             var component = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent");
@@ -60,13 +61,13 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
         {
             var requestData = new RequestData();
 
-            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(requestData).Count);
+            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromRequestData(requestData).Count);
 
             requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 2);
             requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 3);
             requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 4);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromRequestData(requestData);
             Assert.AreEqual(1, componentsList.Count);
 
             var component = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent");
@@ -81,13 +82,13 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
         {
             var requestData = new RequestData();
 
-            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(requestData).Count);
+            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromRequestData(requestData).Count);
 
             requestData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
             requestData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
             requestData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromRequestData(requestData);
             Assert.AreEqual(3, componentsList.Count);
 
             var component1 = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent1");
@@ -108,7 +109,7 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
         {
             var requestData = new RequestData();
 
-            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromAgent(requestData).Count);
+            Assert.AreEqual(0, TestSerializationHelper.GetComponentsListFromRequestData(requestData).Count);
 
             requestData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
             requestData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
@@ -119,7 +120,7 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
             requestData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
             requestData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromRequestData(requestData);
             Assert.AreEqual(3, componentsList.Count);
 
             var component1 = TestSerializationHelper.GetComponentMapFromComponentsList(componentsList, "TestComponent1");
@@ -146,19 +147,19 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
             requestData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
             requestData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
 
-            var beforeResetList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
+            var beforeResetList = TestSerializationHelper.GetComponentsListFromRequestData(requestData);
             Assert.AreEqual(3, beforeResetList.Count);
 
             requestData.Reset();
 
-            var firstAfterResetList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
+            var firstAfterResetList = TestSerializationHelper.GetComponentsListFromRequestData(requestData);
             Assert.AreEqual(0, firstAfterResetList.Count);
 
             requestData.AddMetric("com.newrelic.test", "TestComponent1", "Test/Metric", "unit", 2);
             requestData.AddMetric("com.newrelic.test", "TestComponent2", "Test/Metric", "unit", 3);
             requestData.AddMetric("com.newrelic.test", "TestComponent3", "Test/Metric", "unit", 4);
 
-            var secondAfterResetList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
+            var secondAfterResetList = TestSerializationHelper.GetComponentsListFromRequestData(requestData);
             Assert.AreEqual(3, secondAfterResetList.Count);
         }
 
@@ -170,7 +171,7 @@ namespace NewRelic.Platform.Sdk.UnitTests.Binding
             requestData.AddMetric("com.newrelic.test", "TestComponent", "Test/Metric", "unit", 2);
             requestData.AddMetric("com.newrelic.anothertest", "TestComponent", "Test/Metric", "unit", 2);
 
-            var componentsList = TestSerializationHelper.GetComponentsListFromAgent(requestData);
+            var componentsList = TestSerializationHelper.GetComponentsListFromRequestData(requestData);
             Assert.AreEqual(2, componentsList.Count);
         }
 
