@@ -40,24 +40,6 @@ namespace NewRelic.Platform.Sdk.FunctionalTests
         }
 
         [TestMethod]
-        public void TestRunnerSendFailsWithBadLicense()
-        {
-            try
-            {
-                Environment.SetEnvironmentVariable(Constants.ConfigKeyLicenseKey, "GarbageLicense");
-
-                Runner runner = new Runner();
-                Agent agent = null;
-                runner.Add(agent);
-                Assert.Fail("Runner should raise exception when license is bad");
-            }
-            catch (ArgumentNullException)
-            {
-                // Expected
-            }
-        }
-
-        [TestMethod]
         public void TestRunnerReportContinuesWithNullAgentName()
         {
             Runner runner = new Runner();
