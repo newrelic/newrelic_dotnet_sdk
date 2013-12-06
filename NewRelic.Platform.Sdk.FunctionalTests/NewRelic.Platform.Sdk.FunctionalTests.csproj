@@ -62,9 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="test-config.json">
+    <Resource Include="test-config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
