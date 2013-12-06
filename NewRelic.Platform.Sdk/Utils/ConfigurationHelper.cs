@@ -15,7 +15,7 @@ namespace NewRelic.Platform.Sdk.Utils
 
         internal static string GetConfiguration(string key, string defaultValue)
         {
-            var configuration = System.Configuration.ConfigurationManager.AppSettings[key] ?? defaultValue;
+            var configuration = Environment.GetEnvironmentVariable(key) ?? ConfigurationManager.AppSettings[key] ?? defaultValue;
 
             if (configuration == null)
             {

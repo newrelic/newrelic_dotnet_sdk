@@ -40,12 +40,24 @@ namespace NewRelic.Platform.Sdk
 
         internal List<object> ReadJsonFile()
         {
-            if(!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), this.ConfigurationFileName)))
+            string filePath = null;
+
+            // First check if they've explicitly configured a target dir, or else use the default folder
+            if (File.Exists(Path.Combine(ConfigurationHelper.GetConfiguration(Constants.ConfigKeyConfigDir, Constants.DefaultConfigDir), this.ConfigurationFileName)))
+            {
+                filePath = Path.Combine(ConfigurationHelper.GetConfiguration(Constants.ConfigKeyConfigDir, Constants.DefaultConfigDir), this.ConfigurationFileName);
+            }
+            // Fall back to the current directory of the executable (Global configuration for all users)
+            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), this.ConfigurationFileName)))
+            {
+                filePath = Path.Combine(Directory.GetCurrentDirectory(), this.ConfigurationFileName);
+            }
+            else
             {
                 throw new FileNotFoundException("Unable to locate agent configuration file", this.ConfigurationFileName);
             }
 
-            using (var reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), this.ConfigurationFileName)))
+            using (var reader = new StreamReader(filePath))
             {
                 using (var jsonReader = new JsonTextReader(reader))
                 {
