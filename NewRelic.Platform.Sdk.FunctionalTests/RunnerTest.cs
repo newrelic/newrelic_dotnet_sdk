@@ -40,14 +40,16 @@ namespace NewRelic.Platform.Sdk.FunctionalTests
         }
 
         [TestMethod]
-        public void TestRunnerReportFailsWithNullAgentName()
+        public void TestRunnerSendFailsWithBadLicense()
         {
             try
             {
+                Environment.SetEnvironmentVariable(Constants.ConfigKeyLicenseKey, "GarbageLicense");
+
                 Runner runner = new Runner();
-                runner.Add(new TestAgent("", 4));
-                runner.SetupAndRunWithLimit(1);
-                Assert.Fail("Runner should raise exception when name is null");
+                Agent agent = null;
+                runner.Add(agent);
+                Assert.Fail("Runner should raise exception when license is bad");
             }
             catch (ArgumentNullException)
             {
@@ -56,19 +58,19 @@ namespace NewRelic.Platform.Sdk.FunctionalTests
         }
 
         [TestMethod]
-        public void TestRunnerReportFailsWithNegativeValue()
+        public void TestRunnerReportContinuesWithNullAgentName()
         {
-            try
-            {
-                Runner runner = new Runner();
-                runner.Add(new TestAgent("FunctionalTest", -10));
-                runner.SetupAndRunWithLimit(1);
-                Assert.Fail("Runner should raise exception when value is negative");
-            }
-            catch (ArgumentException)
-            {
-                // Expected
-            }
+            Runner runner = new Runner();
+            runner.Add(new TestAgent("", 4));
+            runner.SetupAndRunWithLimit(1); // Should not raise an exception
+        }
+
+        [TestMethod]
+        public void TestRunnerReportContinuesWithNegativeValue()
+        {
+            Runner runner = new Runner();
+            runner.Add(new TestAgent("FunctionalTest", -10));
+            runner.SetupAndRunWithLimit(1); // Should not raise an exception
         }
     }
 }
