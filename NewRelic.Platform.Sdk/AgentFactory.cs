@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Newtonsoft.Json;
 using NewRelic.Platform.Sdk.Utils;
+using NLog;
 
 namespace NewRelic.Platform.Sdk
 {
@@ -14,6 +15,8 @@ namespace NewRelic.Platform.Sdk
     public abstract class AgentFactory
     {
 	    private readonly string ConfigurationFileName;
+
+        private static Logger s_log = LogManager.GetLogger("Runner");
 
 	    public AgentFactory(string configFileName) 
         {
@@ -56,6 +59,8 @@ namespace NewRelic.Platform.Sdk
             {
                 throw new FileNotFoundException("Unable to locate agent configuration file", this.ConfigurationFileName);
             }
+
+            s_log.Info("Using configuration file located at: {0}", filePath);
 
             using (var reader = new StreamReader(filePath))
             {

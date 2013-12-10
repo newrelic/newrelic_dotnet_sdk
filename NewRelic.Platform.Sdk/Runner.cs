@@ -146,8 +146,8 @@ namespace NewRelic.Platform.Sdk
         /// <summary>
         /// DO NOT USE: Exposed for test purposes
         /// </summary>
-        private int _limit = 0;
-        private bool _limitRun = false;
+        private int _limit = Int32.Parse(ConfigurationHelper.GetConfiguration(Constants.ConfigKeyMaxIterations, "0"));
+        private bool _limitRun = Int32.Parse(ConfigurationHelper.GetConfiguration(Constants.ConfigKeyMaxIterations, "0")) != 0;
 
         internal List<Agent> Agents { get { return _agents; } }
 
