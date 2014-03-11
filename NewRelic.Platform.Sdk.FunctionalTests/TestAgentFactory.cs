@@ -8,16 +8,6 @@ namespace NewRelic.Platform.Sdk.FunctionalTests
 {
     class TestAgentFactory : AgentFactory
     {
-        public TestAgentFactory()
-            : base("test-config.json")
-        {
-        }
-
-        public TestAgentFactory(string configFileName)
-            : base(configFileName)
-        {
-        }
-
         // This will return the deserialized properties from the specified configuration file
         // It will be invoked once per JSON object in the configuration file
         public override Agent CreateAgentWithConfiguration(IDictionary<string, object> properties)

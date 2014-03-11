@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using System.IO;
-using Newtonsoft.Json;
 using NewRelic.Platform.Sdk.Utils;
+using Newtonsoft.Json;
 using NLog;
 
 namespace NewRelic.Platform.Sdk
@@ -14,19 +13,9 @@ namespace NewRelic.Platform.Sdk
     /// </summary>
     public abstract class AgentFactory
     {
-	    private readonly string ConfigurationFileName;
+	    private const string ConfigurationFilePath = @".\config\plugin.json";
 
         private static Logger s_log = LogManager.GetLogger("Runner");
-
-	    public AgentFactory(string configFileName) 
-        {
-            if (string.IsNullOrEmpty(configFileName))
-            {
-                throw new ArgumentNullException("configFileName", "You must pass in a non-null path for the configuration file");
-            }
-
-		    this.ConfigurationFileName = configFileName;
-	    }
 
         internal List<Agent> CreateAgents()
         {
@@ -43,33 +32,16 @@ namespace NewRelic.Platform.Sdk
 
         internal List<object> ReadJsonFile()
         {
-            string filePath = null;
-
-            // First check if they've explicitly configured a target dir, or else use the default folder
-            if (File.Exists(Path.Combine(ConfigurationHelper.GetConfiguration(Constants.ConfigKeyConfigDir, Constants.DefaultConfigDir), this.ConfigurationFileName)))
+            if (!File.Exists(ConfigurationFilePath))
             {
-                filePath = Path.Combine(ConfigurationHelper.GetConfiguration(Constants.ConfigKeyConfigDir, Constants.DefaultConfigDir), this.ConfigurationFileName);
+                throw new FileNotFoundException(string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Unable to locate agent configuration file at {0}",
+                    Path.GetFullPath(ConfigurationFilePath)));
             }
-            // Fall back to the current directory of the executable (Global configuration for all users)
-            else if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), this.ConfigurationFileName)))
-            {
-                filePath = Path.Combine(Directory.GetCurrentDirectory(), this.ConfigurationFileName);
-            }
-            else
-            {
-                throw new FileNotFoundException("Unable to locate agent configuration file", this.ConfigurationFileName);
-            }
-
-            s_log.Info("Using configuration file located at: {0}", filePath);
-
-            using (var reader = new StreamReader(filePath))
-            {
-                using (var jsonReader = new JsonTextReader(reader))
-                {
-                    var agentProperties = JsonHelper.Deserialize(reader.ReadToEnd());
-                    return (List<object>)agentProperties;
-                }
-            }
+            
+            object agentProperties = JsonHelper.Deserialize(File.ReadAllText(ConfigurationFilePath));
+            return (List<object>)agentProperties;
         }
 
         /// <summary>
