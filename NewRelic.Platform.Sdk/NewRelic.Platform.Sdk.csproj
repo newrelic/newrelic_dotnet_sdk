@@ -59,9 +59,10 @@
     <Compile Include="Binding\MetricData.cs" />
     <Compile Include="AgentFactory.cs" />
     <Compile Include="Binding\RequestData.cs" />
+    <Compile Include="Configuration\LogLevel.cs" />
+    <Compile Include="Configuration\NewRelicConfig.cs" />
     <Compile Include="Processors\EpochProcessor.cs" />
     <Compile Include="Processors\IProcessor.cs" />
-    <Compile Include="Utils\ConfigurationHelper.cs" />
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\JsonHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,7 +71,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="config\template.newrelic.json" />
+    <None Include="config\newrelic.json" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

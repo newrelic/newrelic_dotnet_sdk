@@ -1,0 +1,9 @@
+﻿{
+<<<<<<< HEAD
+    "license_key": "YOUR_LICENSE_KEY_HERE", 
+	"endpoint": "http://rpm.newrelic.com/platform/v1/metrics"
+}
+=======
+    "license_key": "YOUR_LICENSE_KEY_HERE"
+}
+>>>>>>> 0cbb0e6... responded to PR comments

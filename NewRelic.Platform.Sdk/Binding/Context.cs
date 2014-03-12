@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net;
 using System.IO;
+using System.Net;
+using NewRelic.Platform.Sdk.Configuration;
 using NewRelic.Platform.Sdk.Utils;
 using NLog;
-using System.Diagnostics;
 
 namespace NewRelic.Platform.Sdk.Binding
 {
@@ -17,8 +14,8 @@ namespace NewRelic.Platform.Sdk.Binding
 
         private static Logger s_log = LogManager.GetLogger("Context");
 
-        internal string ServiceUri { get { return ConfigurationHelper.GetConfiguration(Constants.ConfigKeyServiceUri, Constants.DefaultServiceUri); } }
-        internal string LicenseKey { get { return _licenseKey ?? ConfigurationHelper.GetConfiguration(Constants.ConfigKeyLicenseKey); } }
+        internal string ServiceUri { get { return NewRelicConfig.Instance.Endpoint; } }
+        internal string LicenseKey { get { return _licenseKey ?? NewRelicConfig.Instance.LicenseKey; } }
 
         public string Version 
         { 

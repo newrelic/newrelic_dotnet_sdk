@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using NewRelic.Platform.Sdk.Binding;
 using System.Threading;
-using NewRelic.Platform.Sdk.Utils;
+using NewRelic.Platform.Sdk.Binding;
+using NewRelic.Platform.Sdk.Configuration;
 using NLog;
 
 namespace NewRelic.Platform.Sdk
@@ -127,17 +126,7 @@ namespace NewRelic.Platform.Sdk
 
         private int GetPollInterval()
         {
-            int pollInterval = 0;
-            var configVal = ConfigurationHelper.GetConfiguration(Constants.ConfigKeyPollInterval, Constants.DefaultPollInterval);
-
-            Int32.TryParse(configVal, out pollInterval);
-            s_log.Debug("Using poll interval: {0} seconds", pollInterval);
-
-            if (pollInterval < 30)
-            {
-                throw new ArgumentOutOfRangeException("PollInterval", "A poll interval below 30 seconds is not supported");
-            }
-
+            int pollInterval = 60;
             return pollInterval *= 1000; // Convert to milliseconds since that's what system calls expect;
         }
 
@@ -146,8 +135,8 @@ namespace NewRelic.Platform.Sdk
         /// <summary>
         /// DO NOT USE: Exposed for test purposes
         /// </summary>
-        private int _limit = Int32.Parse(ConfigurationHelper.GetConfiguration(Constants.ConfigKeyMaxIterations, "0"));
-        private bool _limitRun = Int32.Parse(ConfigurationHelper.GetConfiguration(Constants.ConfigKeyMaxIterations, "0")) != 0;
+        private int _limit = NewRelicConfig.Instance.NewRelicMaxIterations.GetValueOrDefault();
+        private bool _limitRun = NewRelicConfig.Instance.NewRelicMaxIterations.HasValue;
 
         internal List<Agent> Agents { get { return _agents; } }
 

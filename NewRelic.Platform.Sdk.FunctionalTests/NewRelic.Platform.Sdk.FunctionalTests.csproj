@@ -62,9 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Resource Include="test-config.json">
+    <None Include="config\newrelic.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </None>
+    <None Include="config\plugin.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
