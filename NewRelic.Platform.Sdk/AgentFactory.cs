@@ -13,16 +13,16 @@ namespace NewRelic.Platform.Sdk
     /// </summary>
     public abstract class AgentFactory
     {
-	    private const string ConfigurationFilePath = @".\config\plugin.json";
+        private const string ConfigurationFilePath = @".\config\plugin.json";
 
         private static Logger s_log = LogManager.GetLogger("Runner");
 
         internal List<Agent> CreateAgents()
         {
-            var agentConfigurations = ReadJsonFile();
+            List<object> agentConfigurations = ReadJsonFile();
             List<Agent> agents = new List<Agent>();
 
-            foreach (var properties in agentConfigurations)
+            foreach (object properties in agentConfigurations)
             {
                 agents.Add(CreateAgentWithConfiguration((IDictionary<string, object>)properties));
             }
@@ -39,7 +39,7 @@ namespace NewRelic.Platform.Sdk
                     "Unable to locate agent configuration file at {0}",
                     Path.GetFullPath(ConfigurationFilePath)));
             }
-            
+
             object agentProperties = JsonHelper.Deserialize(File.ReadAllText(ConfigurationFilePath));
             return (List<object>)agentProperties;
         }

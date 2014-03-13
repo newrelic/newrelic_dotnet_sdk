@@ -3,13 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewRelic.Platform.Sdk", "NewRelic.Platform.Sdk\NewRelic.Platform.Sdk.csproj", "{6A9DC6C5-280E-42B9-AE30-B66803DF20B6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{40D1A74E-1E93-4EC9-8202-08CEF9AC558A}"
-	ProjectSection(SolutionItems) = preProject
-		Local.testsettings = Local.testsettings
-		NewRelic.Platform.Sdk.vsmdi = NewRelic.Platform.Sdk.vsmdi
-		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewRelic.Platform.Sdk.UnitTests", "NewRelic.Platform.Sdk.UnitTests\NewRelic.Platform.Sdk.UnitTests.csproj", "{27A3FE83-DED5-474D-B869-753A1566D578}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewRelic.Platform.Sdk.FunctionalTests", "NewRelic.Platform.Sdk.FunctionalTests\NewRelic.Platform.Sdk.FunctionalTests.csproj", "{E2720282-8274-42FC-9488-717E55FA27D3}"

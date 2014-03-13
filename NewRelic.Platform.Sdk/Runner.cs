@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using NewRelic.Platform.Sdk.Binding;
 using NewRelic.Platform.Sdk.Configuration;
+using NewRelic.Platform.Sdk.Utils;
 using NLog;
 
 namespace NewRelic.Platform.Sdk
@@ -12,13 +14,26 @@ namespace NewRelic.Platform.Sdk
     {
         private List<AgentFactory> _factories;
         private List<Agent> _agents;
+        private readonly INewRelicConfig newRelicConfig;
 
         private static Logger s_log = LogManager.GetLogger("Runner");
 
-        public Runner()
+        public Runner(INewRelicConfig config = null)
         {
+            this.newRelicConfig = config ?? NewRelicConfig.Instance;
+
             _factories = new List<AgentFactory>();
             _agents = new List<Agent>();
+
+            this.SetupProxy(
+                this.newRelicConfig.ProxyHost,
+                this.newRelicConfig.ProxyPort,
+                this.newRelicConfig.ProxyUserName,
+                this.newRelicConfig.ProxyPassword);
+
+            // used for testing purposes
+            _limit = this.newRelicConfig.NewRelicMaxIterations.GetValueOrDefault();
+            _limitRun = this.newRelicConfig.NewRelicMaxIterations.HasValue;
         }
 
         /// <summary>
@@ -116,6 +131,41 @@ namespace NewRelic.Platform.Sdk
             }
         }
 
+        protected virtual void SetupProxy(string hostname, int? port, string username, string password)
+        {
+            if (hostname.IsValidString())
+            {
+                UriBuilder builder = new UriBuilder(hostname);
+
+                if (port.HasValue)
+                {
+                    builder.Port = port.Value;
+                }
+                else
+                {
+                    throw new InvalidOperationException("When setting up a proxy, port is required.");
+                }
+                
+                ICredentials credentials;
+                if (username.IsValidString())
+                {
+                    credentials = new NetworkCredential(username, password);
+                }
+                else
+                {
+                    credentials = null;
+                }
+
+                IWebProxy proxy = new WebProxy
+                {
+                    Address = builder.Uri,
+                    Credentials = credentials,
+                };
+
+                WebRequest.DefaultWebProxy = proxy;
+            }
+        }
+
         private void InitializeFactoryAgents()
         {
             foreach (AgentFactory factory in _factories)
@@ -135,8 +185,8 @@ namespace NewRelic.Platform.Sdk
         /// <summary>
         /// DO NOT USE: Exposed for test purposes
         /// </summary>
-        private int _limit = NewRelicConfig.Instance.NewRelicMaxIterations.GetValueOrDefault();
-        private bool _limitRun = NewRelicConfig.Instance.NewRelicMaxIterations.HasValue;
+        private int _limit;
+        private bool _limitRun;
 
         internal List<Agent> Agents { get { return _agents; } }
 

@@ -112,3 +112,4 @@ Backup*/
 UpgradeLog*.XML
 
 newrelic.json
+*.orig

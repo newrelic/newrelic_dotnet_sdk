@@ -53,7 +53,7 @@ namespace NewRelic.Platform.Sdk.Binding
         {
             IDictionary<string, object> output = new Dictionary<string, object>();
 
-            foreach (var metric in _metrics.Values)
+            foreach (MetricData metric in _metrics.Values)
             {
                 output.Add(metric.FullName, metric.Serialize());
             }
