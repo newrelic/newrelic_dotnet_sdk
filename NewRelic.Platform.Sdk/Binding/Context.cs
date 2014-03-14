@@ -4,6 +4,7 @@ using System.Net;
 using NewRelic.Platform.Sdk.Configuration;
 using NewRelic.Platform.Sdk.Utils;
 using NLog;
+using NewRelic.Platform.Sdk.Configuration;
 
 namespace NewRelic.Platform.Sdk.Binding
 {
@@ -11,26 +12,54 @@ namespace NewRelic.Platform.Sdk.Binding
     {
         private RequestData _requestData;
         private string _licenseKey;
+        private readonly INewRelicConfig _newRelicConfig;
 
         private static Logger s_log = LogManager.GetLogger("Context");
 
-        internal string ServiceUri { get { return NewRelicConfig.Instance.Endpoint; } }
-        internal string LicenseKey { get { return _licenseKey ?? NewRelicConfig.Instance.LicenseKey; } }
+        internal string ServiceUri
+        {
+            get
+            {
+                return this._newRelicConfig.Endpoint;
+            }
+        }
 
-        public string Version 
-        { 
-            get { return _requestData.Version; }
-            set { _requestData.Version = value; }  
+        internal string LicenseKey
+        {
+            get
+            {
+                return _licenseKey ?? this._newRelicConfig.LicenseKey;
+            }
+        }
+
+        public string Version
+        {
+            get
+            {
+                return _requestData.Version;
+            }
+            set
+            {
+                _requestData.Version = value;
+            }
         }
 
         // Exposed to enable functional testing for plugin developers
-        public RequestData RequestData { get { return _requestData; } }
+        public RequestData RequestData
+        {
+            get
+            {
+                return _requestData;
+            }
+        }
 
         /// <summary>
         /// This class is responsible for maintaining metrics that have been reported as well as sending them to the New Relic 
         /// service. Any Components that share a Request reference will have their data sent to the service in one request.
         /// </summary>
-        public Context() : this(null)
+        /// <param name="config">The configuration that should be used.</param>
+        public Context(INewRelicConfig config = null)
+            : this(null, config)
         {
         }
 
@@ -38,8 +67,12 @@ namespace NewRelic.Platform.Sdk.Binding
         /// This class is responsible for maintaining metrics that have been reported as well as sending them to the New Relic 
         /// service. Any Components that share a Request reference will have their data sent to the service in one request.
         /// </summary>
-        public Context(string licenseKey)
+        /// <param name="licenseKey">The New Relic license key.</param>
+        /// <param name="config">The configuration that should be used.</param>
+        public Context(string licenseKey, INewRelicConfig config = null)
         {
+            this._newRelicConfig = config ?? NewRelicConfig.Instance;
+
             this._licenseKey = licenseKey;
             this._requestData = new RequestData();
 
@@ -225,7 +258,7 @@ namespace NewRelic.Platform.Sdk.Binding
                             // Collector is being updated
                             s_log.Info("New Relic Service is currently undergoing an upgrade");
                         }
-                        else if (response.StatusCode == HttpStatusCode.Forbidden 
+                        else if (response.StatusCode == HttpStatusCode.Forbidden
                             && string.Equals(Constants.DisableNewRelic, body))
                         {
                             // Remotely disabled
@@ -235,9 +268,9 @@ namespace NewRelic.Platform.Sdk.Binding
                         else
                         {
                             // Log unknown exception
-                            if(s_log.IsErrorEnabled) 
+                            if (s_log.IsErrorEnabled)
                             {
-                                s_log.Error("Unexpected response from the New Relic service. StatusCode: {0} ({1}), BodyContents: {2}", 
+                                s_log.Error("Unexpected response from the New Relic service. StatusCode: {0} ({1}), BodyContents: {2}",
                                     response.StatusCode, response.StatusDescription, body);
                             }
 
