@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using NewRelic.Platform.Sdk.Utils;
 using Newtonsoft.Json;
-using NLog;
 
 namespace NewRelic.Platform.Sdk
 {
@@ -15,7 +14,7 @@ namespace NewRelic.Platform.Sdk
     {
         private const string ConfigurationFilePath = @".\config\plugin.json";
 
-        private static Logger s_log = LogManager.GetLogger("Runner");
+        private static Logger s_log = Logger.GetLogger("AgentFactory");
 
         internal List<Agent> CreateAgents()
         {

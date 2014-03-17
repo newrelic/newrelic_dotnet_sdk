@@ -3,8 +3,6 @@ using System.IO;
 using System.Net;
 using NewRelic.Platform.Sdk.Configuration;
 using NewRelic.Platform.Sdk.Utils;
-using NLog;
-using NewRelic.Platform.Sdk.Configuration;
 
 namespace NewRelic.Platform.Sdk.Binding
 {
@@ -14,7 +12,7 @@ namespace NewRelic.Platform.Sdk.Binding
         private string _licenseKey;
         private readonly INewRelicConfig _newRelicConfig;
 
-        private static Logger s_log = LogManager.GetLogger("Context");
+        private static Logger s_log = Logger.GetLogger("Context");
 
         internal string ServiceUri
         {
@@ -195,12 +193,7 @@ namespace NewRelic.Platform.Sdk.Binding
             using (var writer = new StreamWriter(request.GetRequestStream()))
             {
                 var str = JsonHelper.Serialize(_requestData.Serialize());
-
-                if (s_log.IsDebugEnabled)
-                {
-                    s_log.Debug("Sending JSON: {0}", str);
-                }
-
+                s_log.Debug("Sending JSON: {0}", str);
                 writer.Write(str);
             }
 
@@ -268,11 +261,8 @@ namespace NewRelic.Platform.Sdk.Binding
                         else
                         {
                             // Log unknown exception
-                            if (s_log.IsErrorEnabled)
-                            {
-                                s_log.Error("Unexpected response from the New Relic service. StatusCode: {0} ({1}), BodyContents: {2}",
-                                    response.StatusCode, response.StatusDescription, body);
-                            }
+                            s_log.Error("Unexpected response from the New Relic service. StatusCode: {0} ({1}), BodyContents: {2}",
+                                response.StatusCode, response.StatusDescription, body);
 
                             // Rethrow if this is a client exception, keep trying if it is a server error
                             if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 500)

@@ -9,11 +9,18 @@ namespace NewRelic.Platform.Sdk.Configuration
         private static NewRelicConfig ConfigInstance;
         private const string ConfigPath = @".\config\newrelic.json";
         private const string DefaultEndpoint = "http://platform-api.newrelic.com/platform/v1/metrics";
+        private const string DefaultLogFileName = "newrelic_plugin.log";
+        private const string DefaultLogFilePath = @".\logs";
+        private const int DefaultLogLimitInKiloBytes = 25600;
 
-        public NewRelicConfig()
+        private NewRelicConfig()
         {
             // set default values
             this.Endpoint = DefaultEndpoint;
+            this.LogLevel = LogLevel.Info;
+            this.LogFileName = DefaultLogFileName;
+            this.LogFilePath = DefaultLogFilePath;
+            this.LogLimitInKiloBytes = DefaultLogLimitInKiloBytes;
         }
 
         [JsonProperty(PropertyName = "license_key")]
@@ -23,6 +30,15 @@ namespace NewRelic.Platform.Sdk.Configuration
 
         [JsonProperty(PropertyName = "log_level")]
         public LogLevel LogLevel { get; set; }
+
+        [JsonProperty(PropertyName = "log_filename")]
+        public string LogFileName { get; set; }
+
+        [JsonProperty(PropertyName = "log_file_path")]
+        public string LogFilePath { get; set; }
+
+        [JsonProperty(PropertyName = "log_limit_in_kbytes")]
+        public long LogLimitInKiloBytes { get; set; }
 
         [JsonProperty(PropertyName = "proxy_host")]
         public string ProxyHost { get; set; }
