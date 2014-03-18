@@ -10,6 +10,12 @@ namespace NewRelic.Platform.Sdk.Configuration
 
         LogLevel LogLevel { get; set; }
 
+        string LogFileName { get; set; }
+
+        string LogFilePath { get; set; }
+
+        long LogLimitInKiloBytes { get; set; }
+
         int? NewRelicMaxIterations { get; set; }
 
         string ProxyHost { get; set; }

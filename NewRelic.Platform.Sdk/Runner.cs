@@ -6,7 +6,6 @@ using System.Threading;
 using NewRelic.Platform.Sdk.Binding;
 using NewRelic.Platform.Sdk.Configuration;
 using NewRelic.Platform.Sdk.Utils;
-using NLog;
 
 namespace NewRelic.Platform.Sdk
 {
@@ -16,7 +15,7 @@ namespace NewRelic.Platform.Sdk
         private List<Agent> _agents;
         private readonly INewRelicConfig newRelicConfig;
 
-        private static Logger s_log = LogManager.GetLogger("Runner");
+        private static Logger s_log = Logger.GetLogger("Runner");
 
         public Runner(INewRelicConfig config = null)
         {

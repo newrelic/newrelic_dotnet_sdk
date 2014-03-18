@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NewRelic.Platform.Sdk.Configuration;
+﻿using NewRelic.Platform.Sdk.Configuration;
 
 namespace NewRelic.Platform.Sdk.UnitTests
 {
@@ -12,7 +8,13 @@ namespace NewRelic.Platform.Sdk.UnitTests
 
         public string LicenseKey { get; set; }
 
-        public LogLevel LogLevel { get; set; }        
+        public LogLevel LogLevel { get; set; }
+
+        public string LogFileName { get; set; }
+
+        public string LogFilePath { get; set; }
+
+        public long LogLimitInKiloBytes { get; set; }
 
         public string ProxyHost { get; set; }
 
