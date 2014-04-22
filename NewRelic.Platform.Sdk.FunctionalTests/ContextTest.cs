@@ -10,6 +10,8 @@ using NewRelic.Platform.Sdk.Utils;
 namespace NewRelic.Platform.Sdk.FunctionalTests
 {
     [TestClass]
+    [DeploymentItem(@"config/newrelic.json", "config")]
+    [DeploymentItem(@"config/plugin.json", "config")]
     public class ContextTest
     {
         [TestMethod]

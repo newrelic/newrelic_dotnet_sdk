@@ -7,6 +7,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace NewRelic.Platform.Sdk.FunctionalTests
 {
     [TestClass]
+    [DeploymentItem(@"config/newrelic.json", "config")]
+    [DeploymentItem(@"config/plugin.json", "config")]
     public class RunnerTest
     {
         [TestMethod]
