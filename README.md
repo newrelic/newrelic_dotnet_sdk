@@ -26,11 +26,11 @@ Core classes to be aware of in the SDK:
 
 ### Creating your Plugin ###
 
-* [Step 0 - Know what you want to monitor](#step-0-know-what-you-want-to-monitor)
-* [Step 1 - Create your Agent class](#step-1-create-your-agent-class)
-* [Step 2 - Initialize your Agent instances](#step-2-initialize-your-agent-instances)
-* [Step 3 - Setup your Agents with the Runner](#setup-your-agents-with-the-runner)
-* [Step 4 - Packaging and distribution](#packaging-and-distribution)
+* [Step 0 - Know what you want to monitor](#step-0--know-what-you-want-to-monitor)
+* [Step 1 - Create your Agent class](#step-1-create--your-agent-class)
+* [Step 2 - Initialize your Agent instances](#step-2--initialize-your-agent-instances)
+* [Step 3 - Setup your Agents with the Runner](#step-3--setup-your-agents-with-the-runner)
+* [Step 4 - Packaging and distribution](#step-4--packaging-and-distribution)
 
 #### Step 0 - Know what you want to monitor ####
 
@@ -49,7 +49,7 @@ Every plugin should have one class that extends the SDK's Agent class. This can 
 The only requirement for this step is that implement two well-defined properties to the base SDK Agent class' constructor:
 
 * *GUID* - This is a string field representing the unique identifier for your plugin.  We highly recommend using package notation (i.e. com.mycompany.pluginname)
-* *Version* - This is a string field representing the version of your plugin which should follow the semantic versioning scheme (e.g. "1.2.3")
+* *Version* - This is a string field representing the version of your plugin which should follow the [semantic versioning](http://semver.org/) scheme (e.g. "1.2.3")
 
 This is not a requirement, but we highly recommend overloading the constructor to take in any instance-specific fields to simplify Agent creation for Step 2.
 
@@ -67,7 +67,8 @@ Example:
 This method determines the name that will appear in the New Relic UI for a given instance.  Continuing the MS SQL analogy, you would likely use the hostname of each MS SQL Server you are monitoring to make things easy to trace.
 
 Example: 
-	
+
+```	
     private string name;
     
     public ExampleAgent(string name, /* other fields */) {
@@ -80,8 +81,7 @@ Example:
     public string GetAgentName() {
        	return this.Name; 
     }
-
-	
+```
 
 ##### Override the PollCycle() method #####
 
@@ -89,6 +89,7 @@ This method will be invoked once for each Agent per polling interval while your 
 
 The `ReportMetric()` method signature is the following:
 
+```
 	/// <summary>
     /// Registers a metric for this poll cycle that will be sent when all Agents complete their PollCycle.
     /// </summary>
@@ -96,10 +97,11 @@ The `ReportMetric()` method signature is the following:
     /// <param name="units">The units of the metric</param>
     /// <param name="value">The value of the metric</param>
     public void ReportMetric(string metricName, string units, float value)
-        
+```       
 
 Example: 
 	
+```
 	// Initialize processors for each metric that is processed over time
 	private IProcessor connectionsProcessor = new EpochProcessor();;
 	private IProcessor bytesReadProcessor = new EpochProcessor();;
@@ -119,6 +121,7 @@ Example:
         ReportMetric("BytesRead/Count", "bytes", bytesRead);
         ReportMetric("BytesRead/Rate", "bytes/sec", bytesReadProcessor.Process(bytesRead));
     }
+```
 
 That's it, your Agent class is ready, now all you need to do is initialize them and set them up to run with the Runner!
 
@@ -126,9 +129,9 @@ That's it, your Agent class is ready, now all you need to do is initialize them 
 
 A plugin's value comes from the ability to dynamically configure instance information so it can be reused by others to monitor their infrastructure without code changes.  This requires instance data to come from a configuration file, which was traditionally up to the plugin developer to define.  In version 2 and later of the SDK, this information has been standardized into the 'plugin.json' file.  
 
-##### Working with the './config/plugin.json' file #####
+##### Working with the 'plugin.json' file #####
 
-The 'plugin.json' file is used by all Platform Plugins to configure instance-specific information such as the hostnames you are going to monitor or the user/password combos to access them.  The file is standard JSON and only requires that you have a root-level property named "agents" that contains an array of objects.  Each object in that array should correspond to an instance of something you are monitoring.  Essentially each JSON object in the "agents" array should have all the fields necessary to initialize an instance of your Agent class created in Step 1.  You can pass whatever fields or create as many Agents as you'd like here.
+The 'plugin.json' (located in the '.\config' directory) file is used by all Platform Plugins to configure instance-specific information such as the hostnames you are going to monitor or the user/password combos to access them.  The file is standard JSON and only requires that you have a root-level property named "agents" that contains an array of objects.  Each object in that array should correspond to an instance of something you are monitoring.  Essentially each JSON object in the "agents" array should have all the fields necessary to initialize an instance of your Agent class created in Step 1.  You can pass whatever fields or create as many Agents as you'd like here.
 
 Example 'plugin.json' file:
 
@@ -176,11 +179,11 @@ In order to make your plugin NPI-compatible simply ensure the following:
 * Your plugin was written with the .NET SDK.
 * Your plugin is packaged using the tar.gz compression protocol.
 * Your executable program is named 'plugin.exe' and is located in the root of your plugin folder.
-* Plugin configuration is read from 'plugin.json' file in the './config'.
+* Plugin configuration is read from 'plugin.json' file in the '.\config'.
 * You do not use any relative references in your code.
-* Your plugin contains a 'plugin.template.json' and a 'newrelic.template.json' file in the './config' directory.
+* Your plugin contains a 'plugin.template.json' and a 'newrelic.template.json' file in the '.\config' directory.
 
-Once your plugin is NPI-compatible from a code perspective, place it somewhere that is accessible for consumers to download.  Most customers add the compressed distributable to a 'dist' folder in their Github repository.  From there, go through our publisher flow and be sure to mark your plugin for "NPI" distribution.
+Once your plugin is NPI-compatible from a code perspective, place it somewhere that is accessible for consumers to download.  Most customers add the compressed distributable to a 'dist' folder in their GitHub repository.  From there, go through our publisher flow and be sure to mark your plugin for "NPI" distribution.
 
 #### Next Steps ####
 
