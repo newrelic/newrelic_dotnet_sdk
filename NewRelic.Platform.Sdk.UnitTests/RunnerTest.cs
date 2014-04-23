@@ -6,6 +6,7 @@ using NewRelic.Platform.Sdk.Configuration;
 namespace NewRelic.Platform.Sdk.UnitTests
 {
     [TestClass]
+    [DeploymentItem(@"config/newrelic.json", @"config")]
     public class RunnerTest
     {
         [TestMethod]

@@ -35,7 +35,7 @@ namespace NewRelic.Platform.Sdk
             {
                 throw new FileNotFoundException(string.Format(
                     CultureInfo.InvariantCulture,
-                    "Unable to locate agent configuration file at {0}",
+                    "Unable to locate plugin configuration file at {0}",
                     Path.GetFullPath(ConfigurationFilePath)));
             }
 
