@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using NewRelic.Platform.Sdk.Utils;
-using Newtonsoft.Json;
-using System.Configuration;
 
 namespace NewRelic.Platform.Sdk
 {
@@ -41,11 +39,15 @@ namespace NewRelic.Platform.Sdk
             }
 
             IDictionary<string, object> configContents = JsonHelper.Deserialize(File.ReadAllText(ConfigurationFilePath)) as IDictionary<string, object>;
-            List<object> agentProperties = null;
+            List<object> agentProperties;
 
             if (configContents != null)
             {
                 agentProperties = configContents["agents"] as List<object>;
+            }
+            else
+            {
+                agentProperties = null;
             }
 
             if (agentProperties == null)
