@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using NewRelic.Platform.Sdk.Utils;
-using Newtonsoft.Json;
 
 namespace NewRelic.Platform.Sdk
 {
@@ -39,8 +38,24 @@ namespace NewRelic.Platform.Sdk
                     Path.GetFullPath(ConfigurationFilePath)));
             }
 
-            object agentProperties = JsonHelper.Deserialize(File.ReadAllText(ConfigurationFilePath));
-            return (List<object>)agentProperties;
+            IDictionary<string, object> configContents = JsonHelper.Deserialize(File.ReadAllText(ConfigurationFilePath)) as IDictionary<string, object>;
+            List<object> agentProperties;
+
+            if (configContents != null)
+            {
+                agentProperties = configContents["agents"] as List<object>;
+            }
+            else
+            {
+                agentProperties = null;
+            }
+
+            if (agentProperties == null)
+            {
+                throw new ConfigurationErrorsException("The contents of 'plugin.json' are invalid. Please ensure you have a root 'agents' property that contains an array of JSON objects.");
+            }
+
+            return agentProperties;
         }
 
         /// <summary>

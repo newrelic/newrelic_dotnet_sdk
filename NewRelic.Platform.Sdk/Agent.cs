@@ -46,7 +46,7 @@ namespace NewRelic.Platform.Sdk
         /// <param name="metricName"></param>
         /// <param name="units"></param>
         /// <param name="value"></param>
-        public void ReportMetric(string metricName, string units, float value)
+        public void ReportMetric(string metricName, string units, float? value)
         {
             _context.ReportMetric(this.Guid, this.GetAgentName(), metricName, units, value);
         }
