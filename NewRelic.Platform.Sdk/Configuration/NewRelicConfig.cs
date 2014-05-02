@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.IO;
-using Newtonsoft.Json;
 using System.Reflection;
 using NewRelic.Platform.Sdk.Extensions;
+using Newtonsoft.Json;
 
 namespace NewRelic.Platform.Sdk.Configuration
 {
@@ -65,11 +65,11 @@ namespace NewRelic.Platform.Sdk.Configuration
         {
             get
             {
-                string assemblyPath = Assembly.GetExecutingAssembly().GetLocalPath();
-                string configPath = Path.Combine(assemblyPath, ConfigPath);
-
                 if (ConfigInstance == null)
                 {
+                    string assemblyPath = Assembly.GetExecutingAssembly().GetLocalPath();
+                    string configPath = Path.Combine(assemblyPath, ConfigPath);
+
                     if (!File.Exists(configPath))
                     {
                         throw new FileNotFoundException(string.Format(

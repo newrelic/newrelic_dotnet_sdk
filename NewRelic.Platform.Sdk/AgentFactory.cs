@@ -2,9 +2,9 @@
 using System.Configuration;
 using System.Globalization;
 using System.IO;
-using NewRelic.Platform.Sdk.Utils;
 using System.Reflection;
 using NewRelic.Platform.Sdk.Extensions;
+using NewRelic.Platform.Sdk.Utils;
 
 namespace NewRelic.Platform.Sdk
 {
@@ -40,7 +40,7 @@ namespace NewRelic.Platform.Sdk
                     Path.GetFullPath(ConfigurationFilePath)));
             }
 
-            var localPath = Path.Combine(Assembly.GetExecutingAssembly().GetLocalPath(), ConfigurationFilePath);
+            string localPath = Path.Combine(Assembly.GetExecutingAssembly().GetLocalPath(), ConfigurationFilePath);
             IDictionary<string, object> configContents = JsonHelper.Deserialize(File.ReadAllText(ConfigurationFilePath)) as IDictionary<string, object>;
             List<object> agentProperties;
 
