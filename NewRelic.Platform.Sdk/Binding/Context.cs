@@ -88,7 +88,7 @@ namespace NewRelic.Platform.Sdk.Binding
         /// <param name="value">The non-negative float value representing this value</param>
         public void ReportMetric(string guid, string componentName, string metricName, string units, float? value)
         {
-            s_log.Info("Reporting metric: {0} -> {1}[{2}]={3}", componentName, metricName, units, value);
+            s_log.Debug("Reporting metric: {0} -> {1}[{2}]={3}", componentName, metricName, units, value);
             if (string.IsNullOrEmpty(guid))
             {
                 throw new ArgumentNullException("guid", "Null parameter was passed to ReportMetric()");
@@ -135,7 +135,7 @@ namespace NewRelic.Platform.Sdk.Binding
         /// <param name="sumOfSquares">The non-negative float value representing the sum of square values for this poll cycle</param>
         public void ReportMetric(string guid, string componentName, string metricName, string units, float value, int count, float min, float max, float sumOfSquares)
         {
-            s_log.Info("Reporting metric: {0} -> {1}[{2}]={3}", componentName, metricName, units, value);
+            s_log.Debug("Reporting metric: {0} -> {1}[{2}]={3}", componentName, metricName, units, value);
             if (string.IsNullOrEmpty(guid))
             {
                 throw new ArgumentNullException("guid", "Null parameter was passed to ReportMetric()");

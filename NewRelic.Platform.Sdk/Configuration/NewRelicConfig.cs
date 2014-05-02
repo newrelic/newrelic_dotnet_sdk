@@ -1,16 +1,18 @@
 ﻿using System.Globalization;
 using System.IO;
 using Newtonsoft.Json;
+using System.Reflection;
+using NewRelic.Platform.Sdk.Extensions;
 
 namespace NewRelic.Platform.Sdk.Configuration
 {
-    internal class NewRelicConfig : INewRelicConfig
+    public class NewRelicConfig : INewRelicConfig
     {
         private static NewRelicConfig ConfigInstance;
-        private const string ConfigPath = @".\config\newrelic.json";
+        private const string ConfigPath = @"config\newrelic.json";
         private const string DefaultEndpoint = "http://platform-api.newrelic.com/platform/v1/metrics";
         private const string DefaultLogFileName = "newrelic_plugin.log";
-        private const string DefaultLogFilePath = @".\logs";
+        private const string DefaultLogFilePath = @"logs";
         private const int DefaultLogLimitInKiloBytes = 25600;
 
         private NewRelicConfig()
@@ -19,13 +21,14 @@ namespace NewRelic.Platform.Sdk.Configuration
             this.Endpoint = DefaultEndpoint;
             this.LogLevel = LogLevel.Info;
             this.LogFileName = DefaultLogFileName;
-            this.LogFilePath = DefaultLogFilePath;
+            this.LogFilePath = Path.Combine(Assembly.GetExecutingAssembly().GetLocalPath(), DefaultLogFilePath);
             this.LogLimitInKiloBytes = DefaultLogLimitInKiloBytes;
         }
 
         [JsonProperty(PropertyName = "license_key")]
         public string LicenseKey { get; set; }
 
+        [JsonProperty(PropertyName = "endpoint")]
         public string Endpoint { get; set; }
 
         [JsonProperty(PropertyName = "log_level")]
@@ -52,6 +55,9 @@ namespace NewRelic.Platform.Sdk.Configuration
         [JsonProperty(PropertyName = "proxy_password")]
         public string ProxyPassword { get; set; }
 
+        [JsonProperty(PropertyName = "poll_interval")]
+        public int? PollInterval { get; set; }
+
         // Exposed for testing
         public int? NewRelicMaxIterations { get; set; }
 
@@ -59,17 +65,20 @@ namespace NewRelic.Platform.Sdk.Configuration
         {
             get
             {
+                string assemblyPath = Assembly.GetExecutingAssembly().GetLocalPath();
+                string configPath = Path.Combine(assemblyPath, ConfigPath);
+
                 if (ConfigInstance == null)
                 {
-                    if (!File.Exists(ConfigPath))
+                    if (!File.Exists(configPath))
                     {
                         throw new FileNotFoundException(string.Format(
                             CultureInfo.InvariantCulture,
                             "New relic configuration needs to be located at {0}",
-                            Path.GetFullPath(ConfigPath)));
+                            configPath));
                     }
 
-                    ConfigInstance = JsonConvert.DeserializeObject<NewRelicConfig>(File.ReadAllText(ConfigPath));
+                    ConfigInstance = JsonConvert.DeserializeObject<NewRelicConfig>(File.ReadAllText(configPath));
                 }
 
                 return ConfigInstance;

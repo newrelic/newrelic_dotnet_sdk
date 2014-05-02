@@ -62,6 +62,7 @@
     <Compile Include="Configuration\INewRelicConfig.cs" />
     <Compile Include="Configuration\LogLevel.cs" />
     <Compile Include="Configuration\NewRelicConfig.cs" />
+    <Compile Include="Extensions\ExtensionsForAssembly.cs" />
     <Compile Include="Processors\EpochProcessor.cs" />
     <Compile Include="Processors\IProcessor.cs" />
     <Compile Include="Utils\Constants.cs" />
@@ -74,7 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="config\template.newrelic.json" />
+    <None Include="config\newrelic.template.json" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
