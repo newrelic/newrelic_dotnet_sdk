@@ -16,6 +16,8 @@ namespace NewRelic.Platform.Sdk.Utils
         private static bool Configured = false;
         private static object ConfigureLock = new object();
 
+        public static LogLevel LogLevel { get; private set; }
+
         private Logger(string className)
         {
             this.nLogger = NLogManager.GetLogger(className);
@@ -58,6 +60,9 @@ namespace NewRelic.Platform.Sdk.Utils
             ColoredConsoleTarget consoleTarget = new ColoredConsoleTarget { Name = "Console" };
             loggingConfiguration.AddTarget("Console", consoleTarget);
             loggingConfiguration.LoggingRules.Add(new LoggingRule("*", ToNLogLevel(config.LogLevel), consoleTarget));
+
+            // Store the LogLevel so it can be fetched by consumers
+            LogLevel = config.LogLevel;
 
             if (config.LogFilePath.IsValidString() && config.LogFileName.IsValidString())
             {

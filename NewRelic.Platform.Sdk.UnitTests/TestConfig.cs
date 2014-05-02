@@ -8,6 +8,8 @@ namespace NewRelic.Platform.Sdk.UnitTests
 
         public string LicenseKey { get; set; }
 
+        public int? PollInterval { get; set; }
+
         public LogLevel LogLevel { get; set; }
 
         public string LogFileName { get; set; }

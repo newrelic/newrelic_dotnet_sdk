@@ -25,5 +25,7 @@ namespace NewRelic.Platform.Sdk.Configuration
         int? ProxyPort { get; set; }
 
         string ProxyUserName { get; set; }
+
+        int? PollInterval { get; set; }
     }
 }
