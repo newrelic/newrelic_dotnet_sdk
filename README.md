@@ -56,9 +56,15 @@ This is not a requirement, but we highly recommend overloading the constructor t
 Example:
 
 ```
-    public override string Guid { get { return "com.yourorg.pluginname"; } }    public override string Version { get { return "1.0.0"; } }
+    public override string Guid { get { return "com.yourorg.pluginname"; } }
+    public override string Version { get { return "1.0.0"; } }
     
-    public ExampleAgent(string name, string host, int port)    {        this.Name = name;        this.Host = host;        this.Port = port;    }
+    public ExampleAgent(string name, string host, int port)
+    {
+        this.Name = name;
+        this.Host = host;
+        this.Port = port;
+    }
 ```	
 
 
@@ -159,7 +165,14 @@ Since all plugins require JSON configuration, it would be annoying for every plu
 Example:
 
 ```
-public override Agent CreateAgentWithConfiguration(IDictionary<string, object> properties){    string name = (string)properties["name"];    string host = (string)properties["host"];    int port = (int)properties["port"];    return new ExampleAgent(name, host, port);}
+public override Agent CreateAgentWithConfiguration(IDictionary<string, object> properties)
+{
+    string name = (string)properties["name"];
+    string host = (string)properties["host"];
+    int port = (int)properties["port"];
+
+    return new ExampleAgent(name, host, port);
+}
 ```
 
 #### Step 3 - Set up your Agents with the Runner ####
@@ -167,7 +180,27 @@ public override Agent CreateAgentWithConfiguration(IDictionary<string, object> p
 You're almost there! The last coding step is to create an instance of the Runner class and pass it your AgentFactory class.  This part is very simple, and is best demonstrated through a code example (since most plugins should be identical for this step):
 
 ```
-class Program{    static int Main(string[] args)    {        try        {            Runner runner = new Runner();            runner.Add(new ExampleAgentFactory());             runner.SetupAndRun();        }        catch (Exception e)        {           Console.WriteLine("Exception occurred, unable to continue.\n", e.Message);           return -1;        }        return 0;    }}
+class Program
+{
+    static int Main(string[] args)
+    {
+        try
+        {
+            Runner runner = new Runner();
+
+            runner.Add(new ExampleAgentFactory()); 
+
+            runner.SetupAndRun();
+        }
+        catch (Exception e)
+        {
+           Console.WriteLine("Exception occurred, unable to continue.\n", e.Message);
+           return -1;
+        }
+
+        return 0;
+    }
+}
 ```
 
 #### Step 4 - Packaging and distribution ####
@@ -297,3 +330,8 @@ on irc.freenode.net
 Find a bug?  E-mail support @  New Relic, or post it to [support.newrelic.com](http://support.newrelic.com/).
 
 Thank you!
+
+
+## Contributing
+
+You are welcome to send pull requests to us - however, by doing so you agree that you are granting New Relic a non-exclusive, non-revokable, no-cost license to use the code, algorithms, patents, and ideas in that code in our products if we so choose. You also agree the code is provided as-is and you provide no warranties as to its fitness or correctness for any purpose.
