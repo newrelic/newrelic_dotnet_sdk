@@ -172,7 +172,7 @@ class Program{    static int Main(string[] args)    {        try        { 
 
 #### Step 4 - Packaging and distribution ####
 
-Traditionally plugin developers were responsible for deciding how to distribute their plugin.  Everything from what compression format should be used to where should configuration files be located was up to each individual plugin author.  This created a serious problem for plugin consumers since every new piece of infrastructure that they wanted to monitor required reading a lot of documentation around how to set that particular plugin up.  Enter the New Relic Platform Installer (NPI) tool, a simple, light-weight command line utility that allows someone to easily download, configure and manage plugins. (Read more [here](https://discuss.newrelic.com/category/platform-plugins/platform-installer-beta)). 
+Traditionally plugin developers were responsible for deciding how to distribute their plugin.  Everything from what compression format should be used to where should configuration files be located was up to each individual plugin author.  This created a serious problem for plugin consumers since every new piece of infrastructure that they wanted to monitor required reading a lot of documentation around how to set that particular plugin up.  Enter the New Relic Platform Installer (NPI) tool, a simple, light-weight command line utility that allows someone to easily download, configure and manage plugins. (Read more [here](https://discuss.newrelic.com/category/platform-plugins/platform-installer)). 
 
 In order to make your plugin NPI-compatible simply ensure the following:
 
