@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NewRelic.Platform.Sdk;
+﻿using System.Collections.Generic;
 
 namespace NewRelic.Platform.Sdk.FunctionalTests
 {

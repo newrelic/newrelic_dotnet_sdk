@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NewRelic.Platform.Sdk.Processors
+﻿namespace NewRelic.Platform.Sdk.Processors
 {
     /// <summary>
     /// A general purpose interface for processing metric values

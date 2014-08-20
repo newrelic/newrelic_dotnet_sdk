@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace NewRelic.Platform.Sdk.Extensions

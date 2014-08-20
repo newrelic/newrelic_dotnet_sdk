@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NewRelic.Platform.Sdk.Binding;
-using NewRelic.Platform.Sdk.UnitTests;
 
 namespace NewRelic.Platform.Sdk.UnitTests.Binding
 {

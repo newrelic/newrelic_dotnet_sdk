@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using NewRelic.Platform.Sdk.Binding;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 

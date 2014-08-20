@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NewRelic.Platform.Sdk.Utils
+﻿namespace NewRelic.Platform.Sdk.Utils
 {
     public static class StringExtensions
     {

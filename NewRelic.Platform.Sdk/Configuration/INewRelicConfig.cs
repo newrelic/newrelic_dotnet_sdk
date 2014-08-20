@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NewRelic.Platform.Sdk.Configuration
+﻿namespace NewRelic.Platform.Sdk.Configuration
 {
     public interface INewRelicConfig
     {

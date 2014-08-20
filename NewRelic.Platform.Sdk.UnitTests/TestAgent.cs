@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NewRelic.Platform.Sdk.UnitTests
+﻿namespace NewRelic.Platform.Sdk.UnitTests
 {
     internal class TestAgent : Agent
     {
