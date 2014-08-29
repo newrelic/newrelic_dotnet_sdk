@@ -10,7 +10,7 @@ namespace NewRelic.Platform.Sdk.Configuration
     {
         private static NewRelicConfig ConfigInstance;
         private const string ConfigPath = @"config\newrelic.json";
-        private const string DefaultEndpoint = "http://platform-api.newrelic.com/platform/v1/metrics";
+        private const string DefaultEndpoint = "https://platform-api.newrelic.com/platform/v1/metrics";
         private const string DefaultLogFileName = "newrelic_plugin.log";
         private const string DefaultLogFilePath = @"logs";
         private const int DefaultLogLimitInKiloBytes = 25600;
