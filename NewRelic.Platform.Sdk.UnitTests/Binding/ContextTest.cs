@@ -5,7 +5,7 @@ using System.Net;
 
 namespace NewRelic.Platform.Sdk.UnitTests
 {
-    [TestClass()]
+    [TestClass]
     public class ContextTest
     {
         [TestMethod]
