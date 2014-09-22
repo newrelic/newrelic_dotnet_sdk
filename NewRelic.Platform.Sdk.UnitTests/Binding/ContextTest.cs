@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net;
 
-namespace NewRelic.Platform.Sdk.UnitTests
+namespace NewRelic.Platform.Sdk.UnitTests.Binding
 {
     [TestClass]
     public class ContextTest
