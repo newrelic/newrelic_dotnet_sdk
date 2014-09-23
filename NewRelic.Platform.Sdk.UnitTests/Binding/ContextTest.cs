@@ -1,7 +1,6 @@
-﻿using NewRelic.Platform.Sdk.Binding;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Net;
+using NewRelic.Platform.Sdk.Binding;
 
 namespace NewRelic.Platform.Sdk.UnitTests.Binding
 {

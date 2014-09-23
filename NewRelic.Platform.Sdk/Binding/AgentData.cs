@@ -1,9 +1,4 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using NewRelic.Platform.Sdk;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace NewRelic.Platform.Sdk.Binding

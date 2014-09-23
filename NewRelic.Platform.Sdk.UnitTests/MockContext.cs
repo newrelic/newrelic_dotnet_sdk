@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NewRelic.Platform.Sdk.Binding;
+﻿using NewRelic.Platform.Sdk.Binding;
 
 namespace NewRelic.Platform.Sdk.UnitTests
 {

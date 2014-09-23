@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NewRelic.Platform.Sdk.FunctionalTests
+﻿namespace NewRelic.Platform.Sdk.FunctionalTests
 {
     internal class TestAgent : Agent
     {
