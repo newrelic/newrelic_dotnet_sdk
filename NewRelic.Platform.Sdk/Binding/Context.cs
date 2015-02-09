@@ -240,38 +240,46 @@ namespace NewRelic.Platform.Sdk.Binding
             }
             catch (WebException we)
             {
-                using (var response = (HttpWebResponse)we.Response)
+                if( we.Response != null )
                 {
-                    using (var reader = new StreamReader(response.GetResponseStream()))
+                    using (var response = (HttpWebResponse)we.Response)
                     {
-                        var body = reader.ReadToEnd();
+                        using( var reader = new StreamReader( response.GetResponseStream() ) )
+                        {
+                            var body = reader.ReadToEnd();
 
-                        if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
-                        {
-                            // Collector is being updated
-                            s_log.Info("New Relic Service is currently undergoing an upgrade");
-                        }
-                        else if (response.StatusCode == HttpStatusCode.Forbidden
-                            && string.Equals(Constants.DisableNewRelic, body))
-                        {
-                            // Remotely disabled
-                            s_log.Fatal("Remotely disabled by New Relic service");
-                            throw new NewRelicServiceException(response.StatusCode, "Remotely disabled by New Relic Service", we);
-                        }
-                        else
-                        {
-                            // Log unknown exception
-                            s_log.Error("Unexpected response from the New Relic service. StatusCode: {0} ({1}), BodyContents: {2}",
-                                response.StatusCode, response.StatusDescription, body);
-
-                            // Rethrow if this is a client exception, keep trying if it is a server error
-                            if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 500)
+                            if( response.StatusCode == HttpStatusCode.ServiceUnavailable )
                             {
-                                throw new NewRelicServiceException(response.StatusCode, body, we);
+                                // Collector is being updated
+                                s_log.Info( "New Relic Service is currently undergoing an upgrade" );
+                            }
+                            else if( response.StatusCode == HttpStatusCode.Forbidden
+                                && string.Equals( Constants.DisableNewRelic, body ) )
+                            {
+                                // Remotely disabled
+                                s_log.Fatal( "Remotely disabled by New Relic service" );
+                                throw new NewRelicServiceException( response.StatusCode, "Remotely disabled by New Relic Service", we );
+                            }
+                            else
+                            {
+                                // Log unknown exception
+                                s_log.Error( "Unexpected response from the New Relic service. StatusCode: {0} ({1}), BodyContents: {2}",
+                                    response.StatusCode, response.StatusDescription, body );
+
+                                // Rethrow if this is a client exception, keep trying if it is a server error
+                                if( (int)response.StatusCode >= 400 && (int)response.StatusCode < 500 )
+                                {
+                                    throw new NewRelicServiceException( response.StatusCode, body, we );
+                                }
                             }
                         }
                     }
-                } // End using()
+                }
+                else
+                {
+                    // Log unknown exception
+                    s_log.Error( "No response from the New Relic service." );
+                }
             } // End catch()
         } // End HandleServiceResponse()
     } // End Context
